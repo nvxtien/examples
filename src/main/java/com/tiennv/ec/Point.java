@@ -5,26 +5,32 @@ import java.util.Objects;
 
 public final class Point {
 
-    private final BigInteger x;
-    private final BigInteger y;
+    public static final Point POINT_INFINITY = new Point();
 
+    private final BigInteger affineX;
+    private final BigInteger affineY;
 
-    public Point(BigInteger x, BigInteger y) {
-        assert x == null && y == null || x != null && y != null : "invalid parameters";
-        this.x = x;
-        this.y = y;
+    private Point() {
+        this.affineX = null;
+        this.affineY = null;
     }
 
-    public BigInteger getX() {
-        return x;
+    public Point(BigInteger affineX, BigInteger affineY) {
+        assert affineX != null && affineY != null : "invalid parameters";
+        this.affineX = affineX;
+        this.affineY = affineY;
     }
 
-    public BigInteger getY() {
-        return y;
+    public BigInteger getAffineX() {
+        return affineX;
+    }
+
+    public BigInteger getAffineY() {
+        return affineY;
     }
 
     public boolean isInfinity() {
-        return this.x==null && this.y==null;
+        return this.affineX ==null && this.affineY ==null;
     }
 
     @Override
@@ -32,20 +38,20 @@ public final class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return Objects.equals(x, point.x) &&
-                Objects.equals(y, point.y);
+        return Objects.equals(affineX, point.affineX) &&
+                Objects.equals(affineY, point.affineY);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(affineX, affineY);
     }
 
     @Override
     public String toString() {
         return "Point{" +
-                "x=" + x +
-                ", y=" + y +
+                "affineX=" + affineX +
+                ", affineY=" + affineY +
                 '}';
     }
 }
