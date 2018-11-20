@@ -249,4 +249,100 @@ public class EllipticCurveTest {
         Point actual = new Point(xe, ye);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void naf9() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(9);
+        BigInteger b = BigInteger.valueOf(17);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xr = BigInteger.valueOf(16);
+        BigInteger yr = BigInteger.valueOf(5);
+        Point r = new Point(xr, yr);
+        System.out.println("p1: " + r.toString());
+
+        Point expected = ellipticCurve.NAFMultiply(BigInteger.valueOf(9), r);
+        System.out.println("expected: " + expected);
+
+        BigInteger xe = BigInteger.valueOf(4);
+        BigInteger ye = BigInteger.valueOf(5);
+
+        Point actual = new Point(xe, ye);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void naf6() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(9);
+        BigInteger b = BigInteger.valueOf(17);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xr = BigInteger.valueOf(16);
+        BigInteger yr = BigInteger.valueOf(5);
+        Point r = new Point(xr, yr);
+        System.out.println("p1: " + r.toString());
+
+        Point expected = ellipticCurve.NAFMultiply(BigInteger.valueOf(6), r);
+        System.out.println("expected: " + expected);
+
+        BigInteger xe = BigInteger.valueOf(7);
+        BigInteger ye = BigInteger.valueOf(3);
+
+        Point actual = new Point(xe, ye);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void naf7() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(9);
+        BigInteger b = BigInteger.valueOf(17);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xr = BigInteger.valueOf(16);
+        BigInteger yr = BigInteger.valueOf(5);
+        Point r = new Point(xr, yr);
+        System.out.println("p1: " + r.toString());
+
+        Point expected = ellipticCurve.NAFMultiply(BigInteger.valueOf(7), r);
+        System.out.println("expected: " + expected);
+
+        BigInteger xe = BigInteger.valueOf(8);
+        BigInteger ye = BigInteger.valueOf(7);
+
+        Point actual = new Point(xe, ye);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void naf314() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(9);
+        BigInteger b = BigInteger.valueOf(17);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xr = BigInteger.valueOf(16);
+        BigInteger yr = BigInteger.valueOf(5);
+        Point r = new Point(xr, yr);
+        System.out.println("p1: " + r.toString());
+
+        Point expected = ellipticCurve.NAFMultiply(BigInteger.valueOf(314), r);
+        System.out.println("expected: " + expected);
+
+        BigInteger xe = BigInteger.valueOf(7);
+        BigInteger ye = BigInteger.valueOf(20);
+
+        Point actual = new Point(xe, ye);
+        assertEquals(expected, actual);
+    }
 }
