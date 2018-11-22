@@ -29,6 +29,8 @@ public final class EllipticCurve {
     }
 
     public Point inverse(Point p) {
+        if (p.isInfinity()) return Point.POINT_INFINITY;
+        assert isOnCurve(p) : "invalid point";
         return new Point(p.getAffineX(), p.getAffineY().negate());
     }
 
@@ -48,6 +50,8 @@ public final class EllipticCurve {
         if (r.isInfinity()) {
             return Point.POINT_INFINITY;
         }
+
+        assert isOnCurve(r) : "invalid point";
 
         BigInteger yr = r.getAffineY();
 
@@ -84,6 +88,18 @@ public final class EllipticCurve {
      * @return Point
      */
     public Point add(Point p1, Point p2) {
+
+        if (p1.isInfinity() && p2.isInfinity()) {
+            return Point.POINT_INFINITY;
+        }
+
+        if (!p1.isInfinity()) {
+            assert isOnCurve(p1) : "invalid point";
+        }
+
+        if (!p2.isInfinity()) {
+            assert isOnCurve(p2) : "invalid point";
+        }
 
         if (p1.isInfinity()) {
             return p2;
@@ -217,6 +233,21 @@ public final class EllipticCurve {
 
     public BigInteger getB() {
         return this.b;
+    }
+
+    public boolean isOnCurve(Point r) {
+
+        assert !r.isInfinity() : "invalid point";
+
+        BigInteger fx = r.getAffineX().mod(p);
+        BigInteger fa = a.mod(p);
+        BigInteger fb = b.mod(p);
+        BigInteger right = fx.pow(3).add(fx.multiply(fa)).add(fb).mod(p);
+//        System.out.println(right);
+        BigInteger fy = r.getAffineY().mod(p);
+        BigInteger left = fy.modPow(BigInteger.valueOf(2), p);
+//        System.out.println(left);
+        return right.compareTo(left) == 0;
     }
 
     @Override

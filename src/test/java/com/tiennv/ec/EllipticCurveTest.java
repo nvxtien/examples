@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import java.math.BigInteger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class EllipticCurveTest {
 
@@ -344,5 +345,78 @@ public class EllipticCurveTest {
 
         Point actual = new Point(xe, ye);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void isOnCurve() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(1);
+        BigInteger b = BigInteger.valueOf(4);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xr = BigInteger.valueOf(7);
+        BigInteger yr = BigInteger.valueOf(3);
+        Point r = new Point(xr, yr);
+        System.out.println("p1: " + r.toString());
+
+        boolean expected = ellipticCurve.isOnCurve(r);
+        System.out.println("expected: " + expected);
+
+//        boolean actual = true;
+        assertTrue(expected);
+    }
+
+    @Test
+    public void KeyExchange() {
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger a = BigInteger.valueOf(1);
+        BigInteger b = BigInteger.valueOf(4);
+
+        EllipticCurve ellipticCurve = new EllipticCurve(p, a, b);
+        System.out.println(ellipticCurve.toString());
+
+        BigInteger xp = BigInteger.valueOf(7);
+        BigInteger yp = BigInteger.valueOf(3);
+        Point P = new Point(xp, yp);
+        System.out.println("P: " + P.toString());
+
+        BigInteger ka = BigInteger.valueOf(25);
+        BigInteger kb = BigInteger.valueOf(17);
+
+        Point Qa = ellipticCurve.NAFMultiply(ka, P);
+        System.out.println("Qa: " + Qa.toString() + ellipticCurve.isOnCurve(Qa));
+        Qa = ellipticCurve.scalarMultiply(ka, P);
+        System.out.println("Qa: " + Qa.toString() + ellipticCurve.isOnCurve(Qa));
+
+        System.out.println("==================================================");
+
+        Point Qb = ellipticCurve.NAFMultiply(kb, P);
+        System.out.println("Qb: " + Qb.toString() + ellipticCurve.isOnCurve(Qb));
+        Qb = ellipticCurve.scalarMultiply(kb, P);
+        System.out.println("Qb: " + Qb.toString() + ellipticCurve.isOnCurve(Qb));
+
+        BigInteger xm = BigInteger.valueOf(10);
+        BigInteger ym = BigInteger.valueOf(18);
+        Point Pm = new Point(xm, ym);
+        System.out.println("Pm: " + Pm.toString() + ellipticCurve.isOnCurve(Pm));
+
+        Point S = ellipticCurve.scalarMultiply(ka, Qb);
+        System.out.println("S: " + S.toString() + ellipticCurve.isOnCurve(S));
+
+        Point Pc = ellipticCurve.add(Pm, ellipticCurve.scalarMultiply(ka, Qb));
+        System.out.println("Pc: " + Pc.toString());
+
+        Point SS = ellipticCurve.NAFMultiply(kb, Qa);
+        System.out.println("SS: " + SS.toString() + ellipticCurve.isOnCurve(S));
+
+        Point expected = ellipticCurve.add(Pc, ellipticCurve.inverse(ellipticCurve.scalarMultiply(kb, Qa)));
+        System.out.println("expected: " + expected.toString());
+
+        boolean onCurve = ellipticCurve.isOnCurve(expected);
+        System.out.println("onCurve: " + onCurve);
+
+//        assertTrue(expected.equals(Pm));
     }
 }
