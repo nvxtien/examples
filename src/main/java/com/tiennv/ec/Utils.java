@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Multiplication {
+public final class Utils {
 
 
     /**
@@ -16,6 +16,9 @@ public final class Multiplication {
      *              Else: ki ←0.
      *              k←k/2, i←i+1.
      * Return(ki−1, ki−2,..., k1, k0).
+     *
+     * 7  -> 0100-1
+     * 14 -> 100-10
      *
      * @param k
      */

@@ -10,15 +10,27 @@ public final class Point {
     private final BigInteger affineX;
     private final BigInteger affineY;
 
+    private final EllipticCurve ec;
+
     private Point() {
+        this.ec = null;
         this.affineX = null;
         this.affineY = null;
     }
 
-    public Point(BigInteger affineX, BigInteger affineY) {
-        assert affineX != null && affineY != null : "invalid parameters";
+    private Point(EllipticCurve ec, BigInteger affineX, BigInteger affineY) {
+        assert ec != null && affineX != null && affineY != null : "invalid parameters";
+        this.ec = ec;
         this.affineX = affineX;
         this.affineY = affineY;
+    }
+
+    public static Point newPoint(EllipticCurve ec, BigInteger affineX, BigInteger affineY) {
+        return new Point(ec, affineX, affineY);
+    }
+
+    public EllipticCurve getEC() {
+        return ec;
     }
 
     public BigInteger getAffineX() {
@@ -29,8 +41,28 @@ public final class Point {
         return affineY;
     }
 
+    public boolean isOnCurve() {
+
+        assert !this.isInfinity() : "The point must be on the elliptic curve";
+
+        BigInteger fx = this.getAffineX().mod(ec.getP());
+        BigInteger fa = ec.getA().mod(ec.getP());
+        BigInteger fb = ec.getB().mod(ec.getP());
+        BigInteger right = fx.pow(3).add(fx.multiply(fa)).add(fb).mod(ec.getP());
+
+        BigInteger fy = this.getAffineY().mod(ec.getP());
+        BigInteger left = fy.modPow(BigInteger.valueOf(2), ec.getP());
+
+        return right.compareTo(left) == 0;
+    }
+
     public boolean isInfinity() {
         return this.affineX ==null && this.affineY ==null;
+    }
+
+    public Point scalarMultiply(BigInteger k) {
+        Computation computation = new NAF();
+        return computation.scalarMultiply(k, this);
     }
 
     @Override

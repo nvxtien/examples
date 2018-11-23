@@ -3,7 +3,7 @@ package com.tiennv.ec;
 /**
  * EC Diffie-Hellman key exchange
  * P is a fixed system parameter
- * k is a secret key
+ * k is a secret key, large integer( minimum 160bits)
  * Q is a public key
  * Q = kP
  *
