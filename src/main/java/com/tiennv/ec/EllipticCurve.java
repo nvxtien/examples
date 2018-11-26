@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * An elliptic curve over a prime field is a set of points (x,y) on the curve defined by
@@ -43,5 +44,20 @@ public final class EllipticCurve {
                 ", a=" + a +
                 ", b=" + b +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EllipticCurve that = (EllipticCurve) o;
+        return Objects.equals(p, that.p) &&
+                Objects.equals(a, that.a) &&
+                Objects.equals(b, that.b);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p, a, b);
     }
 }

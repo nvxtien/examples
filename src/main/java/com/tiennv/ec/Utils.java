@@ -17,6 +17,7 @@ public final class Utils {
      *              k←k/2, i←i+1.
      * Return(ki−1, ki−2,..., k1, k0).
      *
+     * Example:
      * 7  -> 0100-1
      * 14 -> 100-10
      *

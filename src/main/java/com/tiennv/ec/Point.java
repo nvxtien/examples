@@ -12,6 +12,8 @@ public final class Point {
 
     private final EllipticCurve ec;
 
+//    private final Point point;
+
     private Point() {
         this.ec = null;
         this.affineX = null;
@@ -27,6 +29,16 @@ public final class Point {
 
     public static Point newPoint(EllipticCurve ec, BigInteger affineX, BigInteger affineY) {
         return new Point(ec, affineX, affineY);
+    }
+
+    public Point add(Point r) {
+        EFp eFp = new EFp();
+        return eFp.add(this, r);
+    }
+
+    public Point scalarMultiply(BigInteger k) {
+        Computation computation = new NAF();
+        return computation.scalarMultiply(k, this);
     }
 
     public EllipticCurve getEC() {
@@ -60,9 +72,16 @@ public final class Point {
         return this.affineX ==null && this.affineY ==null;
     }
 
-    public Point scalarMultiply(BigInteger k) {
-        Computation computation = new NAF();
-        return computation.scalarMultiply(k, this);
+    @Override
+    public String toString() {
+        return toString(10);
+    }
+
+    public String toString(int radix) {
+        return "Point{" +
+                "affineX=" + affineX.toString(radix) +
+                ", affineY=" + affineY.toString(radix) +
+                '}';
     }
 
     @Override
@@ -71,19 +90,12 @@ public final class Point {
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
         return Objects.equals(affineX, point.affineX) &&
-                Objects.equals(affineY, point.affineY);
+                Objects.equals(affineY, point.affineY) &&
+                Objects.equals(ec, point.ec);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(affineX, affineY);
-    }
-
-    @Override
-    public String toString() {
-        return "Point{" +
-                "affineX=" + affineX +
-                ", affineY=" + affineY +
-                '}';
+        return Objects.hash(affineX, affineY, ec);
     }
 }
