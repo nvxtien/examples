@@ -78,10 +78,7 @@ public final class Point {
     }
 
     public String toString(int radix) {
-        return "Point{" +
-                "affineX=" + affineX.toString(radix) +
-                ", affineY=" + affineY.toString(radix) +
-                '}';
+        return "[" + affineX.toString(radix) + ", " + affineY.toString(radix) + ']';
     }
 
     @Override

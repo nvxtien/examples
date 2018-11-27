@@ -22,8 +22,77 @@ import java.security.SecureRandom;
  * s*G = R + H(X,R,m) * X
  * = G*(r + H(X, R, m) * x) = r*G + H(X, R, m) * x * G = R + H(X, R, m) * X
  *
+ * http://web.stanford.edu/class/cs259c/lectures/schnorr.pdf
+ *
+ * Key Generation:
+ * 1/ Choose an elliptic curve E over a finite field Fq.
+ * 2/ Choose a random point P ← E(Fq).
+ * 3/ Choose a random integer a ← [1, r] where r is the order of P.
+ * 4/ Choose a hash function H : {0, 1} → [1, r].
+ * 5/ Output pk = (P, Q = [a]P) and sk = (a, pk).
+ *
+ * Signing(sk, M)
+ * 1/ Choose random k ← [1, r] and set R = [k]P.
+ * 2/ Set e = H(M||R).
+ * 3/ Set s = k + ae (mod r).
+ * 4/ Output the signature σ = (R, s).
+ *
+ * Verification(pk, σ = (R, s))
+ * 1/ Compute e = H(M||R).
+ * 2/ If R + [e]Q = [s]P, output “accept”; else output “reject”.
+ *
  */
 public class SchnorrSignatures {
+
+    public PrivateKey generateKeyPair() {
+        return Secp256k1.generateKeyPair(256);
+    }
+
+    public Signature sign(PrivateKey sk, byte[] m) {
+
+        SecureRandom random = new SecureRandom();
+        BigInteger k = new BigInteger(256, random);
+        Point r = Secp256k1.G.scalarMultiply(k);
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        BigInteger input = new BigInteger(m);
+        BigInteger rencode = new BigInteger(r.toString().getBytes());
+        byte[] h = digest.digest(input.or(rencode).toByteArray());
+        BigInteger e =  new BigInteger(h);
+
+        BigInteger s = k.add(sk.getPrivateKey().multiply(e)).mod(Secp256k1.n);
+
+        Signature signature = new Signature(r, s);
+
+        return signature;
+    }
+
+
+    public boolean verify(Point q, Signature signature, byte[] m) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        BigInteger input = new BigInteger(m);
+        BigInteger rencode = new BigInteger(signature.getR().toString().getBytes());
+
+        byte[] h = digest.digest(input.or(rencode).toByteArray());
+        BigInteger e =  new BigInteger(h);
+
+        Point req = signature.getR().add(q.scalarMultiply(e));
+        Point sP = Secp256k1.G.scalarMultiply(signature.getS());
+
+        return  req.equals(sP);
+    }
 
     public void create() {
 

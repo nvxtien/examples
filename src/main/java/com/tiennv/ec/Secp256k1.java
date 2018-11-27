@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 
 public class Secp256k1 {
@@ -15,6 +16,7 @@ public class Secp256k1 {
 
     public static final EllipticCurve Secp256k1 = new EllipticCurve(P, A, B);
     public static final Point G = Point.newPoint(Secp256k1, Gx, Gy);
+    public static final BigInteger n = new BigInteger("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16);
 
     private Secp256k1() {
     }
