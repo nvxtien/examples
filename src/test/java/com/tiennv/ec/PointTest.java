@@ -192,6 +192,9 @@ public class PointTest {
         boolean onCurve = expected.isOnCurve();
         System.out.println("onCurve: " + onCurve);
 
+        Point x = Pm.scalarMultiply(new BigInteger("-10"));
+        System.out.println(x.toString());
+
         assertTrue(expected.equals(Pm));
     }
 }

@@ -24,6 +24,13 @@ public class Secp256k1 {
     public static PrivateKey generateKeyPair(int numBits) {
         SecureRandom random = new SecureRandom();
         BigInteger k = new BigInteger(numBits, random);
+
+        // k = RNG({1, 2, . . . , n − 1})
+        while (!(k.compareTo(n) == -1)) {
+            k = new BigInteger(numBits, random);
+            System.out.println("private key must be less than the order");
+        }
+
         Point r = G.scalarMultiply(k);
 
         return new PrivateKey(k, r);

@@ -71,7 +71,6 @@ public class MuSigTest {
 
         String m = "message";
         cosigner.sign(m.getBytes());
-
         cosigner1.sign(m.getBytes());
 
         Signing signing = cosigner.sendSig();
