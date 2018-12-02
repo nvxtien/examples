@@ -44,7 +44,7 @@ public class MuSig {
 
     public MuSig(final PrivateKey privateKey) {
         this.privateKey = privateKey;
-        this.cosigners.add(privateKey.getPoint());
+        this.cosigners.add(privateKey.getPublicKey().getPoint());
         System.out.println("Public key: " + this.cosigners);
     }
 
@@ -55,13 +55,19 @@ public class MuSig {
     private Point computeXa(final byte[] L, final Point pub) {
         byte[] a = aggH(L, pub);
 //        System.out.println("compute a: " + new BigInteger(a));
+        BigInteger intA = toUnsignedBigInteger(a);
+//        this.ai = intA.toString().getBytes();
+        System.out.println("compute this.ai: " + intA);
+
+        return pub.scalarMultiply(intA);
+    }
+
+    private BigInteger toUnsignedBigInteger(byte[] a) {
         BigInteger intA = new BigInteger(a);
         if (intA.signum() == -1) {
             intA = intA.negate();
         }
-//        this.ai = intA.toString().getBytes();
-        System.out.println("compute this.ai: " + intA);
-        return pub.scalarMultiply(intA);
+        return intA;
     }
 
     public Point computeAggPubKeys() {
@@ -70,7 +76,7 @@ public class MuSig {
         Point aggregatedPubKeys = optPubKeys.get();
         this.aggregatedPubKeys = aggregatedPubKeys;
 
-        byte[] a = aggH(L, this.privateKey.getPoint());
+        byte[] a = aggH(L, this.privateKey.getPublicKey().getPoint());
         this.ai = a;
 
         return aggregatedPubKeys;
@@ -101,11 +107,11 @@ public class MuSig {
 
     private TCommitment computeTComm() {
         SecureRandom random = new SecureRandom();
-        rnonce = new BigInteger(160, random);
+        rnonce = new BigInteger(256, random);
         Point pR = Secp256k1.G.scalarMultiply(rnonce);
         byte[] t = comH(pR);
-        this.rCommitment = new RCommitment(this.privateKey.getPoint(), pR);
-        return new TCommitment(this.privateKey.getPoint(), t);
+        this.rCommitment = new RCommitment(this.privateKey.getPublicKey().getPoint(), pR);
+        return new TCommitment(this.privateKey.getPublicKey().getPoint(), t);
     }
 
     public Point computeAggR() {
@@ -173,19 +179,13 @@ public class MuSig {
         byte[] XR = concat(this.aggregatedPubKeys.toString().getBytes(), this.aggR.toString().getBytes());
         byte[] XRm = concat(XR, m);
         byte[] c = sigH(XRm);
-        BigInteger intC = new BigInteger(c);
-        if (intC.signum() == -1) {
-            intC = intC.negate();
-        }
+        BigInteger intC = toUnsignedBigInteger(c);
         System.out.println("signing with c: " + intC);
 
-        BigInteger intA = new BigInteger(this.ai);
-        if (intA.signum() == -1) {
-            intA = intA.negate();
-        }
+        BigInteger intA = toUnsignedBigInteger(this.ai);
         System.out.println("signing with a: " + intA);
 
-        BigInteger privateKey = this.privateKey.getPrivateKey();
+        BigInteger privateKey = this.privateKey.getKey();
         System.out.println("signing with private key: " + privateKey);
 
         BigInteger s = rnonce.add(intC.multiply(intA).multiply(privateKey)).mod(Secp256k1.n);
@@ -194,7 +194,7 @@ public class MuSig {
 
         System.out.println("================ Self-verify the signature after it has been created======================");
 
-        Point caPublicKey = this.privateKey.getPoint().scalarMultiply(intC).scalarMultiply(intA);
+        Point caPublicKey = this.privateKey.getPublicKey().getPoint().scalarMultiply(intC).scalarMultiply(intA);
 //        System.out.println("caPublicKey: " + caPublicKey.toString());
 
         Point right = this.rCommitment.getR().add(caPublicKey);
@@ -212,7 +212,7 @@ public class MuSig {
 
     public Signing sendSig() {
 
-        return new Signing(this.privateKey.getPoint(), this.s);
+        return new Signing(this.privateKey.getPublicKey().getPoint(), this.s);
     }
 
     public void receiveSig(Signing sign) {
@@ -230,18 +230,12 @@ public class MuSig {
             byte[] XRm = concat(XR, m);
             byte[] c = sigH(XRm);
 
-            BigInteger intC = new BigInteger(c);
-            if (intC.signum() == -1) {
-                intC = intC.negate();
-            }
+            BigInteger intC = toUnsignedBigInteger(c);
             System.out.println("receiveSig c: " + intC);
 
 
             byte[] a = aggH(this.multisetL, sign.getPublicKey());
-            BigInteger intA = new BigInteger(a);
-            if (intA.signum() == -1) {
-                intA = intA.negate();
-            }
+            BigInteger intA = toUnsignedBigInteger(a);
 
             System.out.println("receiveSig a: " + intA);
 
@@ -277,10 +271,7 @@ public class MuSig {
         byte[] XRm = concat(XR, m);
         byte[] c = sigH(XRm);
 
-        BigInteger intC = new BigInteger(c);
-        if (intC.signum() == -1) {
-            intC = intC.negate();
-        }
+        BigInteger intC = toUnsignedBigInteger(c);
         System.out.println("verify c: " + intC);
 
         Point left = this.aggR.add(this.aggregatedPubKeys.scalarMultiply(intC));

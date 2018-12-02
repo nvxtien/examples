@@ -14,6 +14,8 @@ public final class Point {
 
     private final String uncompressed;
 
+    private final EFp eFp = new EFp();
+
 //    private final Point point;
 
     private Point() {
@@ -26,8 +28,8 @@ public final class Point {
     private Point(EllipticCurve ec, BigInteger affineX, BigInteger affineY) {
         assert ec != null && affineX != null && affineY != null && isOnCurve(ec, affineX, affineY) == true : "invalid parameters";
         this.ec = ec;
-        this.affineX = affineX;
-        this.affineY = affineY;
+        this.affineX = affineX.mod(Secp256k1.P);
+        this.affineY = affineY.mod(Secp256k1.P);
         this.uncompressed = "0x04".concat(this.affineX.toString()).concat(this.affineY.toString());
     }
 
@@ -36,8 +38,11 @@ public final class Point {
     }
 
     public Point add(Point r) {
-        final EFp eFp = new EFp();
         return eFp.add(this, r);
+    }
+
+    public Point inverse() {
+        return eFp.inverse(this);
     }
 
     public Point scalarMultiply(BigInteger k) {

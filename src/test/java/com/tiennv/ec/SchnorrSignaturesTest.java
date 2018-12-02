@@ -10,7 +10,7 @@ public class SchnorrSignaturesTest {
         SchnorrSignatures signatures = new SchnorrSignatures();
         PrivateKey privateKey = signatures.generateKeyPair();
         Signature sig = signatures.sign(privateKey, "hello".getBytes());
-        boolean expected = signatures.verify(privateKey.getPoint(), sig, "hello".getBytes());
+        boolean expected = signatures.verify(privateKey.getPublicKey().getPoint(), sig, "hello".getBytes());
         assertTrue(expected);
     }
 }

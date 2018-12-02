@@ -15,10 +15,10 @@ public class MuSigTest {
         List<Point> pubKeys = new ArrayList<>();
 
         PrivateKey privateKey1 = Secp256k1.generateKeyPair(256);
-        pubKeys.add(privateKey1.getPoint());
+        pubKeys.add(privateKey1.getPublicKey().getPoint());
 
         PrivateKey privateKey2 = Secp256k1.generateKeyPair(256);
-        pubKeys.add(privateKey2.getPoint());
+        pubKeys.add(privateKey2.getPublicKey().getPoint());
 
         byte[] L = pubKeys.stream().map(Point::toString).collect(Collectors.joining()).getBytes();
 
@@ -37,10 +37,10 @@ public class MuSigTest {
 
         // X2,...,Xn be the public keys of other cosigners
         List<Point> pubKeys = new ArrayList<>();
-        pubKeys.add(privateKey.getPoint());
+        pubKeys.add(privateKey.getPublicKey().getPoint());
 
         List<Point> pubKeys1 = new ArrayList<>();
-        pubKeys1.add(privateKey1.getPoint());
+        pubKeys1.add(privateKey1.getPublicKey().getPoint());
 
         cosigner.setCosigners(pubKeys1);
         cosigner1.setCosigners(pubKeys);

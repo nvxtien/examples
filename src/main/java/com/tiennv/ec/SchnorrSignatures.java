@@ -66,7 +66,7 @@ public class SchnorrSignatures {
         byte[] h = digest.digest(input.or(rencode).toByteArray());
         BigInteger e =  new BigInteger(h);
 
-        BigInteger s = k.add(sk.getPrivateKey().multiply(e)).mod(Secp256k1.n);
+        BigInteger s = k.add(sk.getKey().multiply(e)).mod(Secp256k1.n);
 
         Signature signature = new Signature(r, s);
 
@@ -99,7 +99,7 @@ public class SchnorrSignatures {
         String m = "message";
 
         PrivateKey priv = Secp256k1.generateKeyPair(160);
-        Point pub = priv.getPoint();
+        Point pub = priv.getPublicKey().getPoint();
 
         SecureRandom secureRandom = new SecureRandom();
         BigInteger nonce = new BigInteger(160, secureRandom);
@@ -121,10 +121,10 @@ public class SchnorrSignatures {
         BigInteger H = new BigInteger(encodedhash);
 
 
-        BigInteger s = nonce.add(H.and(priv.getPrivateKey()));
+        BigInteger s = nonce.add(H.and(priv.getKey()));
 
 
-        BigInteger Hx = H.and(priv.getPrivateKey());
+        BigInteger Hx = H.and(priv.getKey());
         Point HxG = Secp256k1.G.scalarMultiply(Hx);
 
         // (R, S)

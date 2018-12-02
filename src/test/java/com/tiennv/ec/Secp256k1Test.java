@@ -103,13 +103,13 @@ public class Secp256k1Test {
 
         java.security.PrivateKey privKeyU = kpU.getPrivate();
         PublicKey pubKeyU = kpU.getPublic();
-        System.out.println("User U: " + privKeyU.toString());
+        System.out.println("Private key: " + privKeyU.getEncoded().length);
         System.out.println("User U: " + pubKeyU.toString());
 
         KeyPair kpV = kpg.genKeyPair();
         java.security.PrivateKey privKeyV = kpV.getPrivate();
         PublicKey pubKeyV = kpV.getPublic();
-        System.out.println("User V: " + privKeyV.toString());
+        System.out.println("Private key " + privKeyV.toString());
         System.out.println("User V: " + pubKeyV.toString());
 
         KeyAgreement ecdhU = KeyAgreement.getInstance("ECDH");
@@ -124,5 +124,13 @@ public class Secp256k1Test {
                 (new BigInteger(1, ecdhU.generateSecret()).toString(16)).toUpperCase());
         System.out.println("Secret computed by V: 0x" +
                 (new BigInteger(1, ecdhV.generateSecret()).toString(16)).toUpperCase());
+
+
+        BigInteger x = new BigInteger("3699dfdf73462601422ed1e1309bb624e04c6b86fcdc51618c0af69f26ec4132", 16);
+        System.out.println(x.toString(16).length());
+        System.out.println(x.toString().length());
+        System.out.println(x.bitCount());
+
+
     }
 }
