@@ -111,4 +111,21 @@ public class GFp2 {
         BigInteger c1 = this.x.multiply(t1).negate();
         return new GFp2(c1, c0);
     }
+
+    public GFp2 add(final GFp2 that) {
+        return new GFp2(this.x.add(that.x), this.y.add(that.y));
+    }
+
+    public GFp2 subtract(final GFp2 that) {
+        return new GFp2(this.x.subtract(that.x), this.y.subtract(that.y));
+    }
+
+    /**
+     * ξ = i + 3
+     * aξ = (xi+y)(i+3) = (3x+y)i+(3y-x)
+     * @return
+     */
+    public GFp2 multiplyXi() {
+        return new GFp2(BigInteger.valueOf(3).multiply(this.x).add(this.y), BigInteger.valueOf(3).multiply(this.y).subtract(this.x));
+    }
 }
