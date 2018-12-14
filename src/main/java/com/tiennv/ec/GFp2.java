@@ -121,11 +121,15 @@ public class GFp2 {
     }
 
     /**
-     * ξ = i + 3
-     * aξ = (xi+y)(i+3) = (3x+y)i+(3y-x)
+     * Faster Explicit Formulas for Computing Pairings over Ordinary Curves
+     * Section 3
+     * https://www.iacr.org/archive/eurocrypt2011/66320047/66320047.pdf
+     *
+     * ξ = i + 1
+     * aξ = (xi+y)(i+1) = xi^2 + xi + yi + y = (x+y)i + (y-x)
      * @return
      */
     public GFp2 multiplyXi() {
-        return new GFp2(BigInteger.valueOf(3).multiply(this.x).add(this.y), BigInteger.valueOf(3).multiply(this.y).subtract(this.x));
+        return new GFp2(this.x.add(this.y), this.y.subtract(this.x));
     }
 }

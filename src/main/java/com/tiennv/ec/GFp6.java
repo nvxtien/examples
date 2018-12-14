@@ -91,6 +91,67 @@ public class GFp6 {
         return new GFp6(c2, c1, c0);
     }
 
+    /**
+     * High-Speed Software Implementation of the
+     * Optimal Ate Pairing over Barreto–Naehrig Curves
+     *
+     * Algorithm 17 Inverse in Fp6 = Fp2 [v]/(v^3 − ξ).
+     * Require: A = a0 + a1v + a2v^2 ∈ Fp6 .
+     * Ensure: C = c0 + c1v + c2v^2 = A^−1 ∈ Fp6 .
+     *
+     * 1. t0 ← a0^2;
+     * 2. t1 ← a1^2;
+     * 3. t2 ← a2^2;
+     *
+     * 4. t3 ← a0 · a1;
+     * 5. t4 ← a0 · a2;
+     * 6. t5 ← a1 · a2;
+     *
+     * 7. c0 ← t0 − ξ · t5;
+     * 8. c1 ← ξ · t2 − t3;
+     * 9. c2 ← t1 - t4; // c2 ← t1 · t4; error???
+     *
+     * 10. t6 ← a0 · c0;
+     * 11. t6 ← t6 + ξ · a2 · c1;
+     * 12. t6 ← t6 + ξ · a1 · c2;
+     *
+     * 13. t6 ← t6^-1;
+     * 14. c0 ← c0 · t6;
+     * 15. c1 ← c1 · t6;
+     * 16. c2 ← c2 · t6;
+     * 17. return C = c0 + c1v + c2v^2;
+     *
+     * https://eprint.iacr.org/2010/354.pdf
+     *
+     *
+     * @return
+     */
+    public GFp6 inverse() {
+        GFp2 a00 = this.z.square();
+        GFp2 a11 = this.y.square();
+        GFp2 a22 = this.x.square();
+
+        GFp2 a01 = this.z.multiply(this.y);
+        GFp2 a02 = this.z.multiply(this.x);
+        GFp2 a12 = this.y.multiply(this.x);
+
+        GFp2 A = a00.subtract(a12.multiplyXi());
+        GFp2 B = a22.multiplyXi().subtract(a01);
+        GFp2 C = a11.subtract(a02);
+
+        GFp2 F = this.z.multiply(A);
+        F = F.add(this.x.multiply(B).multiplyXi());
+        F = F.add(this.y.multiply(C).multiplyXi());
+
+        F = F.inverse();
+
+        GFp2 c0 = F.multiply(A);
+        GFp2 c1 = F.multiply(B);
+        GFp2 c2 = F.multiply(C);
+
+        return new GFp6(c2, c1, c0);
+    }
+    
     public GFp2 getX() {
         return x;
     }
