@@ -22,10 +22,18 @@ package com.tiennv.ec;
 public class GFp6 {
     private final GFp2 x, y, z;
 
-    public GFp6(GFp2 x, GFp2 y, GFp2 z) {
+    public GFp6(final GFp2 x, final GFp2 y, final GFp2 z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public GFp6 add(GFp6 b) {
+        return new GFp6(this.x.add(b.getX()), this.y.add(b.getY()), this.z.add(b.getZ()));
+    }
+
+    public GFp6 subtract(GFp6 b) {
+        return new GFp6(this.x.subtract(b.getX()), this.y.subtract(b.getY()), this.z.subtract(b.getZ()));
     }
 
     /**
@@ -35,15 +43,14 @@ public class GFp6 {
      * https://eprint.iacr.org/2006/471.pdf
      * Section 4
      *
-     * @param a
      * @param b
      * @return
      */
-    public GFp6 multiply(final GFp6 a, final GFp6 b) {
+    public GFp6 multiply(final GFp6 b) {
         // precomputing the values v0 = a0b0, v1 = a1b1, v2 = a2b2
-        GFp2 a0 = a.getZ();
-        GFp2 a1 = a.getY();
-        GFp2 a2 = a.getX();
+        GFp2 a0 = this.getZ();
+        GFp2 a1 = this.getY();
+        GFp2 a2 = this.getX();
 
         GFp2 b0 = b.getZ();
         GFp2 b1 = b.getY();
@@ -151,7 +158,21 @@ public class GFp6 {
 
         return new GFp6(c2, c1, c0);
     }
-    
+
+    /**
+     * Algorithm 12 Multiplication by γ
+     *
+     * Require: A ∈ Fp6 , where A = a0 + a1v + a2v^2; ai ∈ Fp2 .
+     * Ensure: C = A · γ, C ∈ Fp6 , where C = c0 + c1v + c2v^2; ci ∈ Fp2 .
+     * 1. c0 ← a2 · ξ;
+     * 2. return C ← c0 + a0v + a1v^2;
+     * @return
+     */
+    public GFp6 multiplyGamma() {
+        GFp2 c0 = this.getX().multiplyXi();
+        return new GFp6(this.getY(), this.getZ(), c0);
+    }
+
     public GFp2 getX() {
         return x;
     }
