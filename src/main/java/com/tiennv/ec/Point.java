@@ -28,8 +28,8 @@ public final class Point {
     private Point(EllipticCurve ec, BigInteger affineX, BigInteger affineY) {
         assert ec != null && affineX != null && affineY != null && isOnCurve(ec, affineX, affineY) == true : "invalid parameters";
         this.ec = ec;
-        this.affineX = affineX.mod(Secp256k1.P);
-        this.affineY = affineY.mod(Secp256k1.P);
+        this.affineX = affineX.mod(Secp256k1.p);
+        this.affineY = affineY.mod(Secp256k1.p);
         this.uncompressed = "0x04".concat(this.affineX.toString()).concat(this.affineY.toString());
     }
 
