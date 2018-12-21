@@ -15,6 +15,15 @@ public final class EllipticCurve {
     private final BigInteger a;
     private final BigInteger b;
 
+    // the order of a point P ∈ E as the smallest positive integer n such that [n]P = O
+    private BigInteger n;
+
+    private BigInteger numberOfPoints;
+
+    // The trace of Frobenius or simply trace of a curve is the
+    // value t satisfying #E(Fq) = q + 1 − t
+    private BigInteger t;
+
     public EllipticCurve(final BigInteger p, final BigInteger a, final BigInteger b) {
 
         BigInteger delta = BigInteger.valueOf(4).multiply(a.pow(3)).add(BigInteger.valueOf(27).multiply(b.pow(2))).mod(p);
@@ -35,6 +44,27 @@ public final class EllipticCurve {
 
     public BigInteger getB() {
         return this.b;
+    }
+
+    public void setOrder(BigInteger n) {
+        this.n = n;
+    }
+
+    public BigInteger getOrder() {
+        return this.n;
+    }
+
+    public BigInteger getTrace() {
+        t = p.add(BigInteger.ONE).subtract(this.numberOfPoints);
+        return t;
+    }
+
+    public BigInteger getNumberOfPoints() {
+        return numberOfPoints;
+    }
+
+    public void setNumberOfPoints(BigInteger numberOfPoints) {
+        this.numberOfPoints = numberOfPoints;
     }
 
     @Override
