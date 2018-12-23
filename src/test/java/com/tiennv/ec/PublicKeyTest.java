@@ -45,8 +45,8 @@ public class PublicKeyTest {
         System.out.println(pointNminusOne.getAffineY().toString(16));
         System.out.println(Secp256k1.G.getAffineY().toString(16));
 
-        System.out.println(pointNminusOne.getAffineY().pow(2).mod(Secp256k1.P));
-        System.out.println(Secp256k1.G.getAffineY().pow(2).mod(Secp256k1.P));
+        System.out.println(pointNminusOne.getAffineY().pow(2).mod(Secp256k1.p));
+        System.out.println(Secp256k1.G.getAffineY().pow(2).mod(Secp256k1.p));
 
         System.out.println(pointNminusOne.add(Secp256k1.G));
 

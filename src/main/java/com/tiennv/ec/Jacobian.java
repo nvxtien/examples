@@ -4,11 +4,10 @@ import java.math.BigInteger;
 
 public class Jacobian {
 
-
     private BigInteger x, y, z;
     private EllipticCurve curve;
 
-    // Y^2 = Z^3 + aXZ^4 + bZ^6
+    // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
 
     public Jacobian(EllipticCurve curve, BigInteger x, BigInteger y, BigInteger z) {
         this.curve = curve;
@@ -25,8 +24,12 @@ public class Jacobian {
         return this;
     }
 
-    public Point toAffine(EllipticCurve curve) {
-        return Point.newPoint(curve, this.x.divide(this.z.pow(2)), this.y.divide(this.z.pow(3)));
+    public Point toAffine() {
+        BigInteger invz = this.z.modInverse(this.curve.getP());
+        BigInteger invz2 = invz.modPow(BigInteger.valueOf(2), this.curve.getP());
+        BigInteger invz3 = invz.multiply(invz2).mod(this.curve.getP());
+
+        return Point.newPoint(curve, this.x.multiply(invz2).mod(this.curve.getP()), this.y.multiply(invz3).mod(this.curve.getP()));
     }
 
     /**
@@ -89,18 +92,55 @@ public class Jacobian {
      * @return
      */
     public Jacobian doubling() {
+
+        BigInteger p = this.curve.getP();
+
         BigInteger a = this.x.pow(2);
         BigInteger b = this.y.pow(2);
         BigInteger c = b.pow(2);
 
-        BigInteger d = BigInteger.valueOf(2).multiply(this.x.add(b).pow(2).subtract(a).subtract(c));
+        BigInteger d = BigInteger.valueOf(2).multiply( (this.x.add(b)).pow(2).subtract(a).subtract(c) );
+        System.out.println("dddd: " + d);
+
+
+
         BigInteger e = BigInteger.valueOf(3).multiply(a);
         BigInteger f = e.pow(2);
 
-        BigInteger x3 = f.subtract(BigInteger.valueOf(2).multiply(d));
-        BigInteger y3 = e.multiply(d.subtract(x3)).subtract(BigInteger.valueOf(8).multiply(c));
-        BigInteger z3 = BigInteger.valueOf(2).multiply(this.y).multiply(this.z);
+        BigInteger x3 = f.subtract(BigInteger.valueOf(2).multiply(d)).mod(p);
+        System.out.println("x3: " + x3);
+
+
+        BigInteger y3 = ( e.multiply(d.subtract(x3)) ).subtract(BigInteger.valueOf(8).multiply(c)).mod(p);
+        System.out.println("y3: " + y3);
+
+
+        BigInteger z3 = BigInteger.valueOf(2).multiply(this.y).multiply(this.z).mod(p);
         return new Jacobian(this.curve, x3, y3, z3);
+    }
+
+    /**
+     * https://eprint.iacr.org/2011/338.pdf
+     * Algorithm 3 Montgomery ladder
+     *
+     * @param k
+     * @return
+     */
+    public Jacobian scalarMultiply(BigInteger k) {
+        Jacobian r0 = new Jacobian(this.curve, BigInteger.ONE, BigInteger.ONE, BigInteger.ZERO);
+        Jacobian r1 = this;
+        int n = k.bitLength();
+        for (int i=n-1; i>=0; i--) {
+            BigInteger b = k.and(BigInteger.ONE.shiftRight(i));
+            if (b.compareTo(BigInteger.ONE) == 0) {
+                r0 = r0.add(r1);
+                r1 = r1.doubling();
+            } else {
+                r1 = r1.add(r0);
+                r0 = r0.doubling();
+            }
+        }
+        return r0;
     }
 
     public BigInteger getX() {
@@ -113,5 +153,15 @@ public class Jacobian {
 
     public BigInteger getZ() {
         return z;
+    }
+
+    @Override
+    public String toString() {
+        return "Jacobian{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", curve=" + curve +
+                '}';
     }
 }
