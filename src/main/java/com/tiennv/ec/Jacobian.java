@@ -2,6 +2,8 @@ package com.tiennv.ec;
 
 import java.math.BigInteger;
 
+import static com.tiennv.ec.Constants.*;
+
 public class Jacobian {
 
     private BigInteger x, y, z;
@@ -52,6 +54,7 @@ public class Jacobian {
      *
      */
     public Jacobian add(Jacobian that) {
+
         BigInteger z1z1 = this.z.pow(2);
         BigInteger z2z2 = that.getZ().pow(2);
 
@@ -76,7 +79,7 @@ public class Jacobian {
     }
 
     /**
-     * http://hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#doubling-dbl-2009-l
+     * https://hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#doubling-dbl-2009-l
      *
      * A = X1^2
      * B = Y1^2
@@ -85,38 +88,132 @@ public class Jacobian {
      * D = 2*((X1+B)^2-A-C)
      * E = 3*A
      * F = E^2
+     *
      * X3 = F-2*D
      * Y3 = E*(D-X3)-8*C
      * Z3 = 2*Y1*Z1
+     *
+     * three-operand code
+     *
+     * A = X1^2
+     * B = Y1^2
+     * C = B^2
+     * t0 = X1+B
+     * t1 = t0^2
+     * t2 = t1-A
+     * t3 = t2-C
+     * D = 2*t3
+     * E = 3*A
+     * F = E^2
+     * t4 = 2*D
+     * X3 = F-t4
+     * t5 = D-X3
+     * t6 = 8*C
+     * t7 = E*t5
+     * Y3 = t7-t6
+     * t8 = Y1*Z1
+     * Z3 = 2*t8
+     *
+     *
+     * @return
+     */
+    public Jacobian doubling2() {
+
+        BigInteger p = this.curve.getP();
+
+        /*BigInteger a = this.x.pow(2);
+        BigInteger b = this.y.pow(2);
+        BigInteger c = b.pow(2);
+
+        BigInteger d = TWO.multiply((this.x.add(b)).pow(2).subtract(a).subtract(c));
+        BigInteger e = THREE.multiply(a);
+        BigInteger f = e.pow(2);
+
+        BigInteger X3 = f.subtract(TWO.multiply(d));
+        BigInteger Y3 = (e.multiply(d.subtract(X3))).subtract(EIGHT.multiply(c));
+        BigInteger Z3 = TWO.multiply(this.y).multiply(this.z);
+
+        System.out.println(this.x);*/
+
+        BigInteger A = this.x.pow(2);
+        BigInteger B = this.y.pow(2);
+        BigInteger C = B.pow(2);
+
+        BigInteger t0 = this.x.add(B);
+        BigInteger t1 = t0.pow(2);// t0^2
+        BigInteger t2 = t1.subtract(A);// t1-A
+        BigInteger t3 = t2.subtract(C);// t2-C
+        BigInteger D = TWO.multiply(t3);//2*t3
+        BigInteger E = THREE.multiply(A);//3*A
+        BigInteger F = E.pow(2);//E^2
+        BigInteger t4 = TWO.multiply(D);//2*D
+        BigInteger X3 = F.subtract(t4);// F-t4
+        BigInteger t5 = D.subtract(X3);// D-X3
+        BigInteger t6 = EIGHT.multiply(C);// 8*C
+        BigInteger t7 = E.multiply(t5);// E*t5
+        BigInteger Y3 = t7.subtract(t6);// t7-t6
+        BigInteger t8 = this.y.multiply(this.z);// Y1*Z1
+        BigInteger Z3 = TWO.multiply(t8);// 2*t8
+
+        BigInteger x = X3.mod(p);
+        BigInteger y = Y3.mod(p);
+        BigInteger z = Z3.mod(p);
+
+        return new Jacobian(this.curve, x, y, z);
+    }
+
+    /**
+     * https://hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#doubling-dbl-2007-bl
      *
      * @return
      */
     public Jacobian doubling() {
 
         BigInteger p = this.curve.getP();
+        /*
+        // Efficient elliptic curve exponentiation
+        //https://pdfs.semanticscholar.org/9d61/ae363a68fc3403173e29e333388f8c0fe0b5.pdf
 
         BigInteger a = this.x.pow(2);
         BigInteger b = this.y.pow(2);
-        BigInteger c = b.pow(2);
 
-        BigInteger d = BigInteger.valueOf(2).multiply( (this.x.add(b)).pow(2).subtract(a).subtract(c) );
-        System.out.println("dddd: " + d);
+        BigInteger S = FOUR.multiply(this.x).multiply(b).mod(p);
 
 
+        BigInteger M = THREE.multiply(a).add(this.curve.getA().multiply(this.z.pow(4))).mod(p);
+        BigInteger T = TWO.negate().multiply(S).add(M.pow(2)).mod(p);
 
-        BigInteger e = BigInteger.valueOf(3).multiply(a);
-        BigInteger f = e.pow(2);
 
-        BigInteger x3 = f.subtract(BigInteger.valueOf(2).multiply(d)).mod(p);
+        BigInteger x3 = T;
         System.out.println("x3: " + x3);
 
 
-        BigInteger y3 = ( e.multiply(d.subtract(x3)) ).subtract(BigInteger.valueOf(8).multiply(c)).mod(p);
+        BigInteger y3 = M.multiply(S.subtract(T)).subtract(EIGHT.multiply(b.pow(2))).mod(p);
         System.out.println("y3: " + y3);
 
 
-        BigInteger z3 = BigInteger.valueOf(2).multiply(this.y).multiply(this.z).mod(p);
-        return new Jacobian(this.curve, x3, y3, z3);
+        BigInteger z3 = TWO.multiply(this.y).multiply(this.z).mod(p);
+        System.out.println("z3: " + z3);*/
+        BigInteger y1 = this.y;
+        BigInteger z1 = this.z;
+
+        BigInteger XX = this.x.pow(2);
+        BigInteger YY = y1.pow(2);
+        BigInteger YYYY = YY.pow(2);
+        BigInteger ZZ = this.z.pow(2);
+        BigInteger S = TWO.multiply(this.x.add(YY).pow(2).subtract(XX).subtract(YYYY));
+        BigInteger M = THREE.multiply(XX).add(this.curve.getA().multiply(ZZ.pow(2)));
+        BigInteger T = M.pow(2).subtract(TWO.multiply(S));
+        BigInteger X3 = T;
+
+        BigInteger Y3 = M.multiply(S.subtract(T)).subtract(EIGHT.multiply(YYYY));
+        BigInteger Z3 = y1.add(z1).pow(2).subtract(YY).subtract(ZZ);
+
+        BigInteger x = X3.mod(p);
+        BigInteger y = Y3.mod(p);
+        BigInteger z = Z3.mod(p);
+
+        return new Jacobian(this.curve, x, y, z);
     }
 
     /**
