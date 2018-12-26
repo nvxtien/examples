@@ -1,15 +1,26 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 import static com.tiennv.ec.Constants.*;
 
 public class Jacobian {
 
+    public static final Jacobian POINT_INFINITY = new Jacobian();
+
     private BigInteger x, y, z;
     private EllipticCurve curve;
 
+
+
     // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
+
+    private Jacobian() {
+        this.curve = null;
+        this.x = BigInteger.ONE;
+        this.y = BigInteger.ONE;
+    }
 
     public Jacobian(EllipticCurve curve, BigInteger x, BigInteger y, BigInteger z) {
         this.curve = curve;
@@ -27,11 +38,18 @@ public class Jacobian {
     }
 
     public Point toAffine() {
+        if (this.isInfinity()) {
+            return Point.POINT_INFINITY;
+        }
         BigInteger invz = this.z.modInverse(this.curve.getP());
         BigInteger invz2 = invz.modPow(BigInteger.valueOf(2), this.curve.getP());
         BigInteger invz3 = invz.multiply(invz2).mod(this.curve.getP());
 
         return Point.newPoint(curve, this.x.multiply(invz2).mod(this.curve.getP()), this.y.multiply(invz3).mod(this.curve.getP()));
+    }
+
+    public Jacobian negate() {
+        return new Jacobian(this.curve, this.x, this.y.negate(), this.z);
     }
 
     /**
@@ -55,6 +73,24 @@ public class Jacobian {
      */
     public Jacobian add(Jacobian that) {
 
+        if (that.isInfinity()) {
+            return this;
+        }
+
+        if (this.isInfinity()) {
+            return that;
+        }
+
+        if (this.equals(that.negate())) {
+            return Jacobian.POINT_INFINITY;
+        }
+
+        if (this.equals(that)) {
+            return this.doubling();
+        }
+
+        BigInteger p = this.curve.getP();
+
         BigInteger z1z1 = this.z.pow(2);
         BigInteger z2z2 = that.getZ().pow(2);
 
@@ -75,7 +111,7 @@ public class Jacobian {
         BigInteger y3 = r.multiply(v.subtract(x3)).subtract(BigInteger.valueOf(2).multiply(s1).multiply(j));
         BigInteger z3 = h.multiply(this.z.add(that.z).pow(2).subtract(z1z1).subtract(z2z2));
 
-        return new Jacobian(this.curve, x3, y3, z3);
+        return new Jacobian(this.curve, x3.mod(p), y3.mod(p), z3.mod(p));
     }
 
     /**
@@ -169,6 +205,10 @@ public class Jacobian {
      */
     public Jacobian doubling() {
 
+        if (this.isInfinity()) {
+            return this;
+        }
+
         BigInteger p = this.curve.getP();
         /*
         // Efficient elliptic curve exponentiation
@@ -227,9 +267,10 @@ public class Jacobian {
         Jacobian r0 = new Jacobian(this.curve, BigInteger.ONE, BigInteger.ONE, BigInteger.ZERO);
         Jacobian r1 = this;
         int n = k.bitLength();
+
         for (int i=n-1; i>=0; i--) {
-            BigInteger b = k.and(BigInteger.ONE.shiftRight(i));
-            if (b.compareTo(BigInteger.ONE) == 0) {
+            BigInteger b = k.shiftRight(i).and(BigInteger.ONE);
+            if (b.equals(BigInteger.ONE)) {
                 r0 = r0.add(r1);
                 r1 = r1.doubling();
             } else {
@@ -237,7 +278,13 @@ public class Jacobian {
                 r0 = r0.doubling();
             }
         }
-        return r0;
+
+        BigInteger p = this.curve.getP();
+        return new Jacobian(this.curve, r0.getX().mod(p), r0.getY().mod(p), r0.getZ().mod(p));
+    }
+
+    public boolean isInfinity() {
+        return this.x.equals(BigInteger.ONE) && this.y.equals(BigInteger.ONE) && this.z.equals(BigInteger.ZERO);
     }
 
     public BigInteger getX() {
@@ -260,5 +307,21 @@ public class Jacobian {
                 ", z=" + z +
                 ", curve=" + curve +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jacobian jacobian = (Jacobian) o;
+        return x.equals(jacobian.x) &&
+                y.equals(jacobian.y) &&
+                z.equals(jacobian.z) &&
+                curve.equals(jacobian.curve);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, curve);
     }
 }

@@ -91,11 +91,11 @@ public final class Point {
         BigInteger fy = affineY.mod(ec.getP());
         BigInteger left = fy.modPow(BigInteger.valueOf(2), ec.getP());
 
-        return right.compareTo(left) == 0;
+        return right.equals(left);
     }
 
     public boolean isInfinity() {
-        return this.affineX ==null && this.affineY ==null;
+        return this.affineX == null && this.affineY == null;
     }
 
     @Override

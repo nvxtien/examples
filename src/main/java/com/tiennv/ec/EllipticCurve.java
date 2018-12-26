@@ -81,9 +81,9 @@ public final class EllipticCurve {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EllipticCurve that = (EllipticCurve) o;
-        return Objects.equals(p, that.p) &&
-                Objects.equals(a, that.a) &&
-                Objects.equals(b, that.b);
+        return p.equals(that.p) &&
+                a.equals(that.a) &&
+                b.equals(that.b);
     }
 
     @Override
