@@ -284,7 +284,7 @@ public class Jacobian {
     }
 
     public boolean isInfinity() {
-        return this.x.equals(BigInteger.ONE) && this.y.equals(BigInteger.ONE) && this.z.equals(BigInteger.ZERO);
+        return this.z.equals(BigInteger.ZERO);
     }
 
     public BigInteger getX() {
@@ -297,6 +297,10 @@ public class Jacobian {
 
     public BigInteger getZ() {
         return z;
+    }
+
+    public void print() {
+        System.out.println(toString());
     }
 
     @Override

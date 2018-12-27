@@ -23,17 +23,18 @@ public class NAF extends EFp implements Computation {
     public Point scalarMultiply(BigInteger k, Point r) {
         List<BigInteger> naf = Utils.NAF(k);
         int size = naf.size();
+        System.out.println(size);
         if (size == 0) {
             return Point.POINT_INFINITY;
         }
         Point q = Point.POINT_INFINITY;
         for (int i = size -1; i >= 0; i--) {
             q = doubling(q);
-            if (naf.get(i).compareTo(BigInteger.ONE) == 0) {
+            if (naf.get(i).equals(BigInteger.ONE)) {
                 q = add(q, r);
             }
 
-            if (naf.get(i).compareTo(BigInteger.valueOf(-1)) == 0) {
+            if (naf.get(i).equals(BigInteger.valueOf(-1))) {
                 q = add(q, inverse(r));
             }
         }

@@ -98,6 +98,10 @@ public final class Point {
         return this.affineX == null && this.affineY == null;
     }
 
+    public void print() {
+        System.out.println(toString());
+    }
+
     @Override
     public String toString() {
         return toString(10);

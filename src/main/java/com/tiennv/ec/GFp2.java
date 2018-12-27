@@ -37,8 +37,8 @@ public class GFp2 {
      * @param y
      */
     public GFp2(final BigInteger x, final BigInteger y) {
-        this.x = x.mod(BN256.p);
-        this.y = y.mod(BN256.p);
+        this.x = x.mod(Fp256BN.p);
+        this.y = y.mod(Fp256BN.p);
     }
 
     /**
@@ -106,7 +106,7 @@ public class GFp2 {
         BigInteger t0 = this.y.pow(2);
         BigInteger t1 = this.x.pow(2);
         t0 = t0.subtract(t1);
-        t1 = t0.mod(BN256.p);
+        t1 = t0.mod(Fp256BN.p);
         BigInteger c0 = this.y.multiply(t1);
         BigInteger c1 = this.x.multiply(t1).negate();
         return new GFp2(c1, c0);
