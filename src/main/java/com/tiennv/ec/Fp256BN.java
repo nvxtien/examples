@@ -29,5 +29,7 @@ import java.math.BigInteger;
  *
  */
 public class Fp256BN {
-    public static final BigInteger p = new BigInteger("21888242871839275222246405745257275088696311157297823662689037894645226208583", 10);
+    public static final BigInteger p = new BigInteger("65000549695646603732796438742359905742825358107623003571877145026864184071783", 10);
+    public static final BigInteger a = new BigInteger("0", 10);
+    public static final BigInteger b = new BigInteger("7", 10);
 }

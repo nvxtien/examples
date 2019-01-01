@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static com.tiennv.ec.Constants.*;
 import static org.junit.Assert.assertEquals;
@@ -54,6 +55,8 @@ public class Fp256BNTest {
         BigInteger v = new BigInteger("1868033");
         System.out.println(v);
         BigInteger u = v.pow(3);
+        System.out.println("u: " + u);
+
         BigInteger u2 = u.pow(2);
         BigInteger u3 = u2.multiply(u);
         BigInteger u4 = u3.multiply(u);
@@ -111,6 +114,12 @@ public class Fp256BNTest {
         jacobian.print();
 
         assertEquals(jacobian.toAffine(), inv.toAffine());
+
+        BigInteger m = SIX.multiply(u).add(BigInteger.valueOf(2));
+        System.out.println("6u2 NAF: " + m);
+        List<BigInteger> naf = Utils.NAF(m);
+        System.out.println("6u2 NAF: " + naf);
+        System.out.println("6u2 NAF size: " + naf.size());
 
     }
 }

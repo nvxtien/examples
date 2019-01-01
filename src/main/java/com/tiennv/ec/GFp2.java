@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Fp2 = Fp[X]/(X^2 − β), where β is a quadratic non-residue in Fp.(β = −5)
@@ -24,8 +25,8 @@ import java.math.BigInteger;
  * https://eprint.iacr.org/2006/471.pdf
  */
 public class GFp2 {
-    private final BigInteger x;
-    private final BigInteger y;
+    private final GFp x;
+    private final GFp y;
     private static final BigInteger beta = BigInteger.valueOf(-1); // why?
 
     /**
@@ -36,9 +37,9 @@ public class GFp2 {
      * @param x
      * @param y
      */
-    public GFp2(final BigInteger x, final BigInteger y) {
-        this.x = x.mod(Fp256BN.p);
-        this.y = y.mod(Fp256BN.p);
+    public GFp2(final GFp x, final GFp y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -54,10 +55,22 @@ public class GFp2 {
      * @return GFp2
      */
     public GFp2 multiply(final GFp2 that) {
-        BigInteger v0 = this.y.multiply(that.y);
-        BigInteger v1 = this.x.multiply(that.x);
-        BigInteger c0 = v0.add(beta.multiply(v1));
-        BigInteger c1 = this.x.add(this.y).multiply(that.x.multiply(that.y)).subtract(v0).subtract(v1);
+        GFp v0 = this.y.multiply(that.y);
+        GFp v1 = this.x.multiply(that.x);
+        GFp c0 = v0.add(v1.multiplyScalar(beta));
+        GFp c1 = this.x.add(this.y).multiply(that.x.multiply(that.y)).subtract(v0).subtract(v1);
+        return new GFp2(c1, c0);
+    }
+
+    /**
+     * https://eprint.iacr.org/2010/354.pdf
+     * Algorithm 7
+     * @param b
+     * @return
+     */
+    public GFp2 multiplyScalar(final BigInteger b) {
+        GFp c0 = this.y.multiplyScalar(b);
+        GFp c1 = this.x.multiplyScalar(b);
         return new GFp2(c1, c0);
     }
 
@@ -79,9 +92,9 @@ public class GFp2 {
      * @return GFp2
      */
     public GFp2 square() {
-        BigInteger v0 = this.y.multiply(this.x);
-        BigInteger c0 = this.y.add(this.x).multiply(this.y.subtract(this.x));
-        BigInteger c1 = v0.multiply(BigInteger.valueOf(2));
+        GFp v0 = this.y.multiply(this.x);
+        GFp c0 = this.y.add(this.x).multiply(this.y.subtract(this.x));
+        GFp c1 = v0.multiplyScalar(BigInteger.valueOf(2));
         return new GFp2(c1, c0);
     }
 
@@ -103,12 +116,12 @@ public class GFp2 {
      * @return
      */
     public GFp2 inverse() {
-        BigInteger t0 = this.y.pow(2);
-        BigInteger t1 = this.x.pow(2);
-        t0 = t0.subtract(t1);
-        t1 = t0.mod(Fp256BN.p);
-        BigInteger c0 = this.y.multiply(t1);
-        BigInteger c1 = this.x.multiply(t1).negate();
+        GFp t0 = this.y.square();
+        GFp t1 = this.x.square();
+        t0 = t0.subtract(t1.multiplyScalar(beta));
+        t1 = t0.inverse();
+        GFp c0 = this.y.multiply(t1);
+        GFp c1 = this.x.multiply(t1).negate();
         return new GFp2(c1, c0);
     }
 
@@ -118,6 +131,10 @@ public class GFp2 {
 
     public GFp2 subtract(final GFp2 that) {
         return new GFp2(this.x.subtract(that.x), this.y.subtract(that.y));
+    }
+
+    public GFp2 negate() {
+        return new GFp2(this.x.negate(), this.y.negate());
     }
 
     /**
@@ -131,5 +148,29 @@ public class GFp2 {
      */
     public GFp2 multiplyXi() {
         return new GFp2(this.x.add(this.y), this.y.subtract(this.x));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GFp2 gFp2 = (GFp2) o;
+        return x.equals(gFp2.x) &&
+                y.equals(gFp2.y);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
+    public void setOne() {
+        this.x.setZero();
+        this.y.setOne();
+    }
+
+    public void setZero() {
+        this.x.setZero();
+        this.y.setZero();
     }
 }

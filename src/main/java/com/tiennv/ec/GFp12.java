@@ -2,8 +2,14 @@ package com.tiennv.ec;
 
 public class GFp12 {
 
-    private final GFp6 x;
-    private final GFp6 y;
+    private GFp6 x;
+
+    private GFp6 y;
+
+    public GFp12() {
+        this.x = null;
+        this.y = null;
+    }
 
     public GFp12(final GFp6 x, final GFp6 y) {
         this.x = x;
@@ -42,5 +48,23 @@ public class GFp12 {
 
     public GFp6 getY() {
         return y;
+    }
+
+    public void setX(GFp6 x) {
+        this.x = x;
+    }
+
+    public void setY(GFp6 y) {
+        this.y = y;
+    }
+
+    public void setOne() {
+        this.x.setZero();
+        this.y.setOne();
+    }
+
+    public void setZero() {
+        this.x.setZero();
+        this.y.setZero();
     }
 }

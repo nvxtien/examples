@@ -184,4 +184,13 @@ public class GFp6 {
     public GFp2 getZ() {
         return z;
     }
+
+    public void setOne() {
+        this.x.setZero();
+        this.y.setZero();
+        this.z.setOne();
+    }
+
+    public void setZero() {
+    }
 }
