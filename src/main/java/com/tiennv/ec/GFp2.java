@@ -58,7 +58,9 @@ public class GFp2 {
         GFp v0 = this.y.multiply(that.y);
         GFp v1 = this.x.multiply(that.x);
         GFp c0 = v0.add(v1.multiplyScalar(beta));
-        GFp c1 = this.x.add(this.y).multiply(that.x.multiply(that.y)).subtract(v0).subtract(v1);
+        // example: (0 + 1)(1 + 3) - 3 - 0 = 1
+        GFp c1 = this.x.add(this.y).multiply(that.x.add(that.y)).subtract(v0).subtract(v1);
+
         return new GFp2(c1, c0);
     }
 
@@ -142,12 +144,42 @@ public class GFp2 {
      * Section 3
      * https://www.iacr.org/archive/eurocrypt2011/66320047/66320047.pdf
      *
-     * ξ = i + 1
-     * aξ = (xi+y)(i+1) = xi^2 + xi + yi + y = (x+y)i + (y-x)
+     * ξ = i + 3
+     * aξ = (xi+y)(i+3) = xi^2 + 3xi + yi + 3y = (3x+y)i + (3y-x)
      * @return
      */
     public GFp2 multiplyXi() {
-        return new GFp2(this.x.add(this.y), this.y.subtract(this.x));
+        GFp a = this.x.multiplyScalar(BigInteger.valueOf(3)).add(this.y);
+        GFp b = this.y.multiplyScalar(BigInteger.valueOf(3)).subtract(this.x);
+        return new GFp2(a, b);
+    }
+
+    @Override
+    public String toString() {
+        return "GFp2{" +
+                "x=" + x.getValue() +
+                ", y=" + y.getValue() +
+                '}';
+    }
+
+    public GFp2 exp(BigInteger k) {
+
+        GFp2 r0 = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
+        GFp2 r1 = this;
+
+        int n = k.bitLength();
+        for (int i=n-1; i>=0; i--) {
+            BigInteger b = k.shiftRight(i).and(BigInteger.ONE);
+            if (b.equals(BigInteger.ONE)) {
+                r0 = r0.multiply(r1);
+                r1 = r1.square();
+            } else {
+                r1 = r1.multiply(r0);
+                r0 = r0.square();
+            }
+        }
+
+        return r0;
     }
 
     @Override
@@ -172,5 +204,9 @@ public class GFp2 {
     public void setZero() {
         this.x.setZero();
         this.y.setZero();
+    }
+
+    public void print() {
+        System.out.println(toString());
     }
 }

@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Fp2 = Fp[X]/(X^2 − β), where β is a quadratic non-residue in Fp.(β = −5)
@@ -31,6 +32,7 @@ public class GFp {
      */
     public GFp(final BigInteger x) {
         this.x = x.mod(Fp256BN.p);
+//        System.out.println(x);
     }
 
     /**
@@ -91,5 +93,29 @@ public class GFp {
 
     public void setZero() {
         this.setX(BigInteger.ZERO);
+    }
+
+    @Override
+    public String toString() {
+        return "GFp{" +
+                "value=" + x +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GFp gFp = (GFp) o;
+        return x.equals(gFp.x);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x);
+    }
+
+    public void print() {
+        System.out.println(toString());
     }
 }
