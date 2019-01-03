@@ -179,6 +179,23 @@ public class GFp2 {
             }
         }
 
+        /*GFp2 r0 = this;
+        GFp2 r1 = this.square();
+
+        int n = k.bitLength();
+        for (int i=n-2; i>=0; i--) {
+            BigInteger b = k.shiftRight(i).and(BigInteger.ONE);
+            if (b.equals(BigInteger.ONE)) {
+                // x1=x1*x2; x2=x2^2
+                r0 = r0.multiply(r1);
+                r1 = r1.square();
+            } else {
+                // x2=x1*x2; x1=x1^2
+                r1 = r1.multiply(r0);
+                r0 = r0.square();
+            }
+        }*/
+
         return r0;
     }
 
