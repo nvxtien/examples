@@ -223,6 +223,14 @@ public class GFp2 {
         this.y.setZero();
     }
 
+    public GFp getX() {
+        return x;
+    }
+
+    public GFp getY() {
+        return y;
+    }
+
     public void print() {
         System.out.println(toString());
     }
