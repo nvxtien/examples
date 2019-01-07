@@ -3,6 +3,9 @@ package com.tiennv.ec;
 import java.math.BigInteger;
 import java.util.List;
 
+import static com.tiennv.ec.Fp256BN.gamma12;
+import static com.tiennv.ec.Fp256BN.gamma13;
+
 public class Pairing {
 
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
@@ -161,6 +164,23 @@ public class Pairing {
 
         // Q1 ← πp(Q); Q2 ← πp2 (Q);
         // Q1 ← (x^p, y^p)
+
+        EllipticCurve twist;
+
+        // ξ^((p-1)/3) where ξ = i+3
+        // x^p = ωx
+        GFp2 x = q.getX().conjugate().multiply(gamma12);
+
+        // ξ^((p-1)/2) where ξ = i+3
+        GFp2 y = q.getY().conjugate().multiply(gamma13);
+
+        GFp2 z = ONE;
+        TwistPoint q1 = new TwistPoint(x, y, z);
+
+//        x;// = q.getX().conjugate().multiply(gamma12);
+//        y = q.getY();
+//        z = ONE;
+//        q1;// = new TwistPoint(x, y, z);
 
         return f;
     }

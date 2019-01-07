@@ -124,5 +124,31 @@ public class GFp2Test {
         GFp2 gamma15 = gFp2.exp(Fp256BN.p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(6)).multiply(BigInteger.valueOf(5)));
         gamma15.print();
         // GFp2{x=1245143187432300088936752143608583630584766701540069380810616116854858284281, y=4638399546766722085016829746319127061133897159450628465163723049144537093234}
+
+
+        // gamma = xi
+        GFp2 gamma = gFp2.exp(Fp256BN.p);
+        gamma.print();
+
+//        GFp2 cọnjugateXi = new GFp2(new GFp(new BigInteger("-1")), new GFp(new BigInteger("3")));
+//        cọnjugateXi.print();
+
+        gFp2.print();
+        GFp2 twistB = gFp2.inverse().multiplyScalar(BigInteger.valueOf(3));
+        twistB.print();
+        //GFp2{x=6500054969564660373279643874235990574282535810762300357187714502686418407178, y=45500384786952622612957507119651934019977750675336102500314001518804928850249}
+
+//        GFp2 one = gFp2.multiply(twistB);
+//        one.print();
+
+        // ξ^(p-1)/2
+//        GFp2 xiToPMinus1Over2 = gFp2.exp(Fp256BN.p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
+//        xiToPMinus1Over2.print();
+
+        // xiToPSquaredMinus1Over3 is ξ^((p²-1)/3) where ξ = i+3.
+//        var xiToPSquaredMinus1Over3 = bigFromBase10("65000549695646603727810655408050771481677621702948236658134783353303381437752")
+        GFp2 xiToPSquaredMinus1Over3 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.ONE).divide(BigInteger.valueOf(3)));
+        xiToPSquaredMinus1Over3.print();
+
     }
 }

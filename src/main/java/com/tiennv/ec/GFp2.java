@@ -234,4 +234,8 @@ public class GFp2 {
     public void print() {
         System.out.println(toString());
     }
+
+    public GFp2 conjugate() {
+        return new GFp2(getX().negate(), getY());
+    }
 }

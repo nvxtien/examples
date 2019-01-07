@@ -26,8 +26,8 @@ public class TwistPoint {
         this.z = ZERO;
     }
 
-    public TwistPoint(EllipticCurve curve, GFp2 x, GFp2 y, GFp2 z) {
-        this.curve = curve;
+    public TwistPoint(GFp2 x, GFp2 y, GFp2 z) {
+//        this.curve = curve;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -53,7 +53,7 @@ public class TwistPoint {
     }*/
 
     public TwistPoint negate() {
-        return new TwistPoint(this.curve, this.x, this.y.negate(), this.z);
+        return new TwistPoint(this.x, this.y.negate(), this.z);
     }
 
     /**
@@ -124,7 +124,7 @@ public class TwistPoint {
         GFp2 z3 = h.multiply(this.z.add(that.z).square().subtract(z1z1).subtract(z2z2));
 
 
-        return new TwistPoint(this.curve, x3, y3, z3);
+        return new TwistPoint(x3, y3, z3);
     }
 
     /**
@@ -267,7 +267,7 @@ public class TwistPoint {
 //        GFp2 y = Y3.mod(p);
 //        GFp2 z = Z3.mod(p);
 
-        return new TwistPoint(this.curve, x, y, z);
+        return new TwistPoint(x, y, z);
     }
 
     /**
@@ -297,7 +297,7 @@ public class TwistPoint {
             }
         }
 
-        return new TwistPoint(this.curve, r0.getX(), r0.getY(), r0.getZ());
+        return new TwistPoint(r0.getX(), r0.getY(), r0.getZ());
     }
 
     public boolean isInfinity() {
