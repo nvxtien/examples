@@ -1,5 +1,8 @@
 package com.tiennv.ec;
 
+import static com.tiennv.ec.Constants.XI_2PMinus2_Over3;
+import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
+
 /**
  * Cubic over quadratic
  * Multiplication and Squaring on Pairing-Friendly Fields
@@ -192,5 +195,51 @@ public class GFp6 {
     }
 
     public void setZero() {
+    }
+
+    /**
+     * v^3 = ξ
+     * pi(xv^2 + y.v + z) = pi(x).v^2p + pi(y).v^p + p(z)
+     *         pi(x).v^2p =  pi(x).v^2.v^3(2p-2)/3
+     *         pi(x).v^2p =  pi(x).v^2.ξ^(2p-2)/3
+     *
+     *         pi(y).v^p =  pi(x).v.v^3(p-1)/3
+     *         pi(y).v^p =  pi(x).v.ξ^(p-1)/3
+     *
+     * @return
+     */
+    public GFp6 frobeniusP() {
+        GFp2 x = this.getX().frobeniusP().multiply(XI_2PMinus2_Over3);
+        GFp2 y = this.getY().frobeniusP().multiply(XI_PMinus1_Over3);
+        GFp2 z = this.getZ().frobeniusP();
+
+        return new GFp6(x, y, z);
+    }
+
+    public GFp6 multiplyScalar(final GFp2 k) {
+        GFp2 x = this.getX().multiply(k);
+        GFp2 y = this.getY().multiply(k);
+        GFp2 z = this.getZ().multiply(k);
+        return new GFp6(x, y, z);
+    }
+
+    /**
+     * v^3 = ξ
+     * pi2(xv^2 + y.v + z) = pi2(x).v^2p^2 + pi2(y).v^p^2 + p2(z)
+     *         pi2(x).v^2p^2 =  x.v^2.v^3(2p^2-2)/3 // pi(pi(x)) = conjugate(conjugate(x)) = x
+     *         pi2(x).v^2p^2 =  x.v^2.ξ^(2p^2-2)/3
+     *
+     *         pi2(y).v^p^2 =  y.v.v^3(p^2-1)/3
+     *         pi2(y).v^p^2 =  y.v.ξ^(p^2-1)/3
+     *
+     * @return
+     */
+    public GFp6 frobeniusP2() {
+
+        // XI_2PSquaredMinus2_Over3
+        // XI_2PSquaredMinus1_Over3
+
+
+        return null;
     }
 }

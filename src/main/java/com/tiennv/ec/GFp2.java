@@ -235,7 +235,21 @@ public class GFp2 {
         System.out.println(toString());
     }
 
+    /**
+     * x^2 = β
+     * pi(ax + b) = pi(a)pi(x) + pi(b)
+     *            = a.x^p + b
+     *            = a.x.x^2(p-1)/2 + b
+     *            = a.x.β^(p-1)/2 + b
+     *            = a.x.(-1) + b // -1 = β^(p-1)/2 (mod p)
+     *            = conjugate(ax + b)
+     * @return
+     */
+    public GFp2 frobeniusP() {
+        return this.conjugate();
+    }
+
     public GFp2 conjugate() {
-        return new GFp2(getX().negate(), getY());
+        return new GFp2(this.x.negate(), this.y);
     }
 }

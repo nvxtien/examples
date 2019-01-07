@@ -1,5 +1,8 @@
 package com.tiennv.ec;
 
+import static com.tiennv.ec.Constants.XI;
+import static com.tiennv.ec.Constants.XI_PMinus1_Over6;
+
 public class GFp12 {
 
     private GFp6 x;
@@ -40,6 +43,28 @@ public class GFp12 {
         GFp6 c1 = this.getY().add(this.getX()).multiply(that.getY().add(that.getX())).subtract(a0b0).subtract(a1b1);
 
         return new GFp12(c1, c0);
+    }
+
+    /**
+     * pi(xw + y) = pi(x).w^p + pi(y)
+     *  pi(x).w^p = pi(x).w.w^(p-1)
+     *            = pi(x).w.γ^(p-1)/2 // w^2 = γ
+     *            = pi(x).w.ξ^(p-1)/6 // γ^3 = ξ
+     *
+     * @return
+     */
+    public GFp12 frobeniusP() {
+        GFp6 x = this.getX().frobeniusP().multiplyScalar(XI_PMinus1_Over6);
+        GFp6 y = this.getY().frobeniusP();
+
+        return new GFp12(x, y);
+    }
+
+    public GFp12 frobeniusP2() {
+        GFp6 x = this.getX().frobeniusP2().multiplyScalar(XI_PMinus1_Over6);
+        GFp6 y = this.getY().frobeniusP2();
+
+        return new GFp12(x, y);
     }
 
     public GFp6 getX() {
