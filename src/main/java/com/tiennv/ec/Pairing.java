@@ -167,11 +167,22 @@ public class Pairing {
 
         EllipticCurve twist;
 
+        // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
+        // ξ^6 = ω
+        // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
+        //                  = x^p.ω^2.ξ^(p-1)/3
+
+        // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ω^(3p-3)
+        // ξ^6 = ω
+        // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ξ^(p-1)/2
+        //
+
         // ξ^((p-1)/3) where ξ = i+3
-        // x^p = ωx
+        // x^p = x.x^(p-1)=x.x^3(p-1)/3=x.ξ^(p-1)/3
         GFp2 x = q.getX().conjugate().multiply(gamma12);
 
         // ξ^((p-1)/2) where ξ = i+3
+        // x^p=x.x^2(p-1)/2=
         GFp2 y = q.getY().conjugate().multiply(gamma13);
 
         GFp2 z = ONE;
@@ -181,6 +192,20 @@ public class Pairing {
 //        y = q.getY();
 //        z = ONE;
 //        q1;// = new TwistPoint(x, y, z);
+
+
+        // (xω^2)^p^2=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
+        // ξ^6 = ω
+        // (xω^2)^p=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
+        //                  = x^p.ω^2.ξ^(p^2-1)/3
+
+        // (yω^3)^p^2=y^p.ω^3p^2=y^p.ω^3.ω^(3p^2-3)
+        // ξ^6 = ω
+        // (yω^3)^p=y^p.ω^3p^2=y^p.ω^3.ξ^(p^2-1)/2
+        //
+
+        // x^p^2 =
+        // xv^2p^2
 
         return f;
     }

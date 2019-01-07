@@ -150,5 +150,13 @@ public class GFp2Test {
         GFp2 xiToPSquaredMinus1Over3 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.ONE).divide(BigInteger.valueOf(3)));
         xiToPSquaredMinus1Over3.print();
 
+        // ξ^(p^2-1)/2
+        GFp2 xiToPSquaredMinus1Over2 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
+        xiToPSquaredMinus1Over2.print();
+        xiToPSquaredMinus1Over2 = xiToPSquaredMinus1Over2.negate();
+        xiToPSquaredMinus1Over2.print();
+
+        GFp2 cọnjugateXi = new GFp2(new GFp(new BigInteger("-1")), new GFp(new BigInteger("3")));
+        cọnjugateXi.print();
     }
 }
