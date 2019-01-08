@@ -26,7 +26,7 @@ public class TwistPoint {
         this.z = ZERO;
     }
 
-    public TwistPoint(GFp2 x, GFp2 y, GFp2 z) {
+    public TwistPoint(final GFp2 x, final GFp2 y, final GFp2 z) {
 //        this.curve = curve;
         this.x = x;
         this.y = y;

@@ -18,8 +18,13 @@ public class Constants {
     public static final GFp2 XI_PMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
     public static final GFp2 XI_PMinus1_Over6 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
 
+    public static final GFp2 XI_PMinus1_Over2 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+
     //xi To 2PSquared Minus2 Over3
     public static final GFp2 XI_2PSquaredMinus2_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
     public static final GFp2 XI_2PSquaredMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+
+    public static final GFp2 XI_PSquaredMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+    public static final GFp2 XI_PSquaredMinus1_Over2 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
 
 }

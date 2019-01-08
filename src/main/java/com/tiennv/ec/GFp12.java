@@ -1,5 +1,8 @@
 package com.tiennv.ec;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import static com.tiennv.ec.Constants.XI;
 import static com.tiennv.ec.Constants.XI_PMinus1_Over6;
 
@@ -10,8 +13,9 @@ public class GFp12 {
     private GFp6 y;
 
     public GFp12() {
-        this.x = null;
-        this.y = null;
+//        this.x = null;
+//        this.y = null;
+        setOne();
     }
 
     public GFp12(final GFp6 x, final GFp6 y) {
@@ -91,5 +95,94 @@ public class GFp12 {
     public void setZero() {
         this.x.setZero();
         this.y.setZero();
+    }
+
+    public GFp12 conjugate() {
+        return new GFp12(getX().negate(), getY());
+    }
+
+    /**
+     * Algorithm 23 Inverse in Fp12 = Fp6 [w]/(w^2 − γ).
+     *
+     * Require: A = a0 + a1w ∈ Fp12 .
+     * Ensure: C = c0 + c1w = A^−1 ∈ Fp12 .
+     * 1. t0 ← a0^2;
+     * 2. t1 ← a1^2;
+     * 3. t0 ← t0 − γ · t1;
+     * 4. t1 ← t0^−1;
+     * 5. c0 ← a0 · t1;
+     * 6. c1 ← −1 · a1 · t1;
+     * 7. return C = c0 + c1w;
+     *
+     * @return
+     */
+    public GFp12 inverse() {
+
+        GFp6 t0 = getY().square();
+        GFp6 t1 = getX().square();
+
+        t0 = t0.subtract(t1.multiplyGamma());
+        t1 = t0.inverse();
+
+        GFp6 c0 = getY().multiply(t1);
+        GFp6 c1 = getX().multiply(t1).negate();
+
+        return new GFp12(c1, c0);
+    }
+
+    /**
+     * Algorithm 25 Exponentiation in Fp12 = Fp6 [w]/(w^2 − γ).
+     * @param k
+     * @return
+     */
+    public GFp12 exp(BigInteger k) {
+
+        List<BigInteger> naf = Utils.NAF(k);
+        int size = naf.size();
+
+        GFp12 a = this;
+        GFp12 c = a;
+
+        for (int i = size -2; i >= 0; i--) {
+            c = c.square();
+
+            if (naf.get(i).equals(BigInteger.ONE)) {
+                c = c.multiply(a);
+            }
+
+            if (naf.get(i).equals(BigInteger.valueOf(-1))) {
+                c = c.multiply(a.conjugate());
+            }
+        }
+
+        return c;
+    }
+
+    /**
+     * Algorithm 22 Squaring in Fp12 = Fp6 [w]/(w^2 − γ).
+     *
+     * (y + xw)^2
+     * = y^2 + 2xyw + x^2w^2
+     * = y^2 + x^2.gamma + 2xyw
+     * =  y^2 - gammayx - yx + gammax^2  + yx + gammayx + 2yxw
+     * =  y(y-gammax) - x(y-gammax)  + yx + gammayx + 2yxw
+     * = (y − x) · (y − gamma · x) + y · x + gamma · y · x + 2yxw
+     *
+     * Require: A = a0 + a1w ∈ Fp12 .
+     * Ensure: C = c0 + c1w = A^2 ∈ Fp12 .
+     * 1. c0 ← a0 − a1;
+     * 2. c3 ← a0 − γ · a1;
+     * 3. c2 ← a0 · a1;
+     * 4. c0 ← c0 · c3 + c2;
+     * 5. c1 ← 2c2;
+     * 6. c2 ← γ · c2;
+     * 7. c0 ← c0 + c2;
+     * 8. return C = c0 + c1w;
+     *
+     * @return
+     */
+    private GFp12 square() {
+        
+
     }
 }

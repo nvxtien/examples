@@ -169,6 +169,15 @@ public class GFp6 {
      * Ensure: C = A · γ, C ∈ Fp6 , where C = c0 + c1v + c2v^2; ci ∈ Fp2 .
      * 1. c0 ← a2 · ξ;
      * 2. return C ← c0 + a0v + a1v^2;
+     *
+     * Aγ = (a0 + a1v + a2v^2)γ
+     *    = a0y + a1vγ + a2v^2γ
+     *  y = v
+     * Aγ = a0v + a1v^2 + a2v^3
+     *  v^3 = ξ
+     * Aγ = a0v + a1v^2 + a2ξ
+     *    = a2ξ + a0v + a1v^2
+     *
      * @return
      */
     public GFp6 multiplyGamma() {
@@ -241,5 +250,9 @@ public class GFp6 {
 
 
         return null;
+    }
+
+    public GFp6 negate() {
+        return new GFp6(getX().negate(), getY().negate(), getZ().negate());
     }
 }

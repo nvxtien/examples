@@ -3,9 +3,13 @@ package com.tiennv.ec;
 import java.math.BigInteger;
 import java.util.List;
 
+import static com.tiennv.ec.Constants.*;
 import static com.tiennv.ec.Fp256BN.gamma12;
 import static com.tiennv.ec.Fp256BN.gamma13;
 
+/**
+ * https://eprint.iacr.org/2010/354.pdf
+ */
 public class Pairing {
 
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
@@ -171,19 +175,15 @@ public class Pairing {
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
         //                  = x^p.ω^2.ξ^(p-1)/3
+        GFp2 x = q.getX().conjugate().multiply(gamma12);
+//        GFp2 x = q.getX().conjugate().multiply(XI_PMinus1_Over3);
+
 
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ω^(3p-3)
         // ξ^6 = ω
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ξ^(p-1)/2
-        //
-
-        // ξ^((p-1)/3) where ξ = i+3
-        // x^p = x.x^(p-1)=x.x^3(p-1)/3=x.ξ^(p-1)/3
-        GFp2 x = q.getX().conjugate().multiply(gamma12);
-
-        // ξ^((p-1)/2) where ξ = i+3
-        // x^p=x.x^2(p-1)/2=
         GFp2 y = q.getY().conjugate().multiply(gamma13);
+//        GFp2 y = q.getY().conjugate().multiply(XI_PMinus1_Over2);
 
         GFp2 z = ONE;
         TwistPoint q1 = new TwistPoint(x, y, z);
@@ -198,11 +198,15 @@ public class Pairing {
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
         //                  = x^p.ω^2.ξ^(p^2-1)/3
+        x = q.getX().conjugate().multiply(XI_PSquaredMinus1_Over3);
 
         // (yω^3)^p^2=y^p.ω^3p^2=y^p.ω^3.ω^(3p^2-3)
         // ξ^6 = ω
         // (yω^3)^p=y^p.ω^3p^2=y^p.ω^3.ξ^(p^2-1)/2
-        //
+//        y = q.getY().conjugate().multiply(XI_PSquaredMinus1_Over2).negate();
+        // equals y, so we can ignore compute y, just reuse it
+
+        TwistPoint minusQ2 = new TwistPoint(x, y, z);
 
         // x^p^2 =
         // xv^2p^2
@@ -210,8 +214,32 @@ public class Pairing {
         return f;
     }
 
-    public void finalExponentiation(GFp12 inp) {
+    /**
+     * Algorithm 31 Final Exponentiation
+     *
+     * @param inp
+     */
+    public GFp12 finalExponentiation(GFp12 inp) {
 
+        GFp12 f = new GFp12();// set one
+        // 1) f1 ← ¯f
+        GFp12 f1 = inp.conjugate();
+
+        // 2) f2 ← f^−1
+        GFp12 f2 = inp.inverse();
+
+        // 3) f ← f1 · f2
+        f = f1.multiply(f2);
+
+        // 4) f ← frobeniusP2(f) · f;
+        f = f.frobeniusP2().multiply(f);
+
+        // 5) ft1 ← f^t
+        BigInteger v = new BigInteger("1868033");
+        BigInteger k = v.pow(3);
+        GFp12 ft1 = f.exp(k);
+
+        return f;
     }
 
     public void optimalAte(G2 a, G1 b) {
