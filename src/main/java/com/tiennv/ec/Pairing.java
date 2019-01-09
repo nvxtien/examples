@@ -140,8 +140,42 @@ public class Pairing {
         l.setY(l0);
     }
 
-    public void mulLine(GFp12 r, GFp2 a, GFp2 b, GFp2 c) {
+    /**
+     * Algorithm 21 Multiplication by B = b0 + b1w, where b0 ∈ Fp2 and b1 =b10 + b11v + 0v^2
+     *
+     * Require: A = a0 + a1w ∈ Fp12 and B = b0 + b1w ∈ Fp12 , with b0 = b00 + 0v + 0v^2
+     * and b1 = b10 + b11v + 0v^2
+     * .
+     * Ensure: C = c0 + c1w = A · B ∈ Fp12 .
+     *
+     * 1. t0 ← a0 · b0; {Algorithm 14}
+     * 2. t1 ← a1 · b1; {Algorithm 15}
+     * 3. c0 ← t0 + t1 · γ;
+     * 4. t2 ← (b0 + b10)v + b11v + 0v^2;
+     * 5. c1 ← (a0 + a1) · t2; {Algorithm 15}
+     * 6. c1 ← c1 − t0 − t1;
+     * 7. return C = c0 + c1w;
+     *
+     *
+     * @param f
+     */
+    public GFp12 mulLine(GFp12 f, GFp12 line) {
+        GFp6 t0 = f.getY().multiply(line.getY());
+        GFp6 t1 = f.getX().multiply(line.getX());
 
+        GFp6 c0 = t0.add(t1.multiplyGamma());
+
+        GFp2 b0 = line.getY().getZ();
+        GFp2 b10 = line.getX().getZ();
+        GFp2 b11 = line.getX().getY();
+        GFp2 zero = new GFp2();
+
+        GFp6 t2 = new GFp6(zero, b11, b0.add(b10));
+
+        GFp6 c1 = f.getY().add(f.getX()).multiply(t2);
+        c1 = c1.subtract(t0).subtract(t1);
+
+        return new GFp12(c1, c0);
     }
 
     public GFp12 miller(final TwistPoint q, final CurvePoint p) {
