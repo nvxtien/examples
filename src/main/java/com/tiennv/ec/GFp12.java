@@ -181,8 +181,16 @@ public class GFp12 {
      *
      * @return
      */
-    private GFp12 square() {
-        
+    public GFp12 square() {
+        GFp6 c0 = this.getY().subtract(this.getX());
+        GFp6 c3 = this.getY().subtract(this.getX().multiplyGamma());
+        GFp6 c2 = this.getY().multiply(this.getX());
 
+        c0 = c0.multiply(c3).add(c0);
+        GFp6 c1 = c2.multiplyGFp(new GFp(BigInteger.valueOf(2)));
+        c2 = c2.multiplyGamma();
+        c0 = c0.add(c2);
+
+        return new GFp12(c1, c0);
     }
 }

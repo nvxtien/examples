@@ -28,7 +28,7 @@ public class Pairing {
      * @param p
 //     * @param r2
      */
-    public void lineFuncAdd(TwistPoint q, TwistPoint r, CurvePoint p, TwistPoint t, GFp12 l) {
+    public LineFuncReturn lineFuncAdd(TwistPoint q, TwistPoint r, CurvePoint p) {
 
         GFp2 xq = q.getX();
         GFp2 yq = q.getY();
@@ -81,12 +81,17 @@ public class Pairing {
         l0 = new GFp6(a2, a1, a0);
         l1 = new GFp6(a2, t9, t1);
 
+        TwistPoint t = TwistPoint.POINT_INFINITY;
+        GFp12 l = new GFp12();
+
         t.setX(xt);
         t.setY(yt);
         t.setZ(zt);
 
         l.setX(l1);
         l.setY(l0);
+
+        return new LineFuncReturn(t, l);
     }
 
     /**
@@ -96,7 +101,7 @@ public class Pairing {
      * @param t
      * @param l
      */
-    public  void lineFuncDouble(TwistPoint q, CurvePoint p, TwistPoint t, GFp12 l) {
+    public  LineFuncReturn lineFuncDouble(TwistPoint q, CurvePoint p) {
 
         GFp2 xq = q.getX();
         GFp2 yq = q.getY();
@@ -132,12 +137,17 @@ public class Pairing {
         l0 = new GFp6(zero, zero, t0);
         l1 = new GFp6(zero, t6, t3);
 
+        TwistPoint t = TwistPoint.POINT_INFINITY;
+        GFp12 l = new GFp12();
+
         t.setX(xt);
         t.setY(yt);
         t.setZ(zt);
 
         l.setX(l1);
         l.setY(l0);
+
+        return new LineFuncReturn(t, l);
     }
 
     public void mulLine(GFp12 r, GFp2 a, GFp2 b, GFp2 c) {
@@ -154,14 +164,21 @@ public class Pairing {
         GFp12 f = new GFp12();
         f.setOne();
 
-
+        LineFuncReturn ret;
         for (int i = NAF.size()-2; i>=0; i--) {
-            lineFuncDouble(q, p, t, f);
+
+            ret = lineFuncDouble(q, p);
+            t = ret.getT();
+            f = ret.getLine();
 
             if (NAF.get(i).equals(BigInteger.valueOf(-1))) {
-                lineFuncAdd(q, t, p, t, f);
+                ret = lineFuncAdd(q, t, p);
+                t = ret.getT();
+                f = ret.getLine();
             } else if (NAF.get(i).equals(BigInteger.valueOf(1))) {
-                lineFuncAdd(negq, t, p, t, f);
+                ret = lineFuncAdd(negq, t, p);
+                t = ret.getT();
+                f = ret.getLine();
             }
 
         }
@@ -208,6 +225,8 @@ public class Pairing {
 
         TwistPoint minusQ2 = new TwistPoint(x, y, z);
 
+
+
         // x^p^2 =
         // xv^2p^2
 
@@ -236,8 +255,56 @@ public class Pairing {
 
         // 5) ft1 ← f^t
         BigInteger v = new BigInteger("1868033");
-        BigInteger k = v.pow(3);
-        GFp12 ft1 = f.exp(k);
+        BigInteger t = v.pow(3);
+        GFp12 ft1 = f.exp(t);
+
+        // 6
+        GFp12 ft2 = ft1.exp(t);
+        // 7
+        GFp12 ft3 = ft2.exp(t);
+
+        // 8
+        GFp12 fp1 = f.frobeniusP();
+        // 9
+        GFp12 fp2 = f.frobeniusP2();
+        // 10
+        GFp12 fp3 = fp2.frobeniusP();
+        // 11
+        GFp12 y0 = fp1.multiply(fp2).multiply(fp3);
+        // 12
+        GFp12 y1 = f1;
+        // 13
+        GFp12 y2 = ft2.frobeniusP2();
+        // 14
+        GFp12 y3 = ft1.frobeniusP();
+        // 15
+        y3 = y3.conjugate();
+        // 16
+        GFp12 y4 = ft2.frobeniusP().multiply(ft1);
+        // 17
+        y4 = y4.conjugate();
+        // 18
+        GFp12 y5 = ft2.conjugate();
+        // 19
+        GFp12 y6 = ft3.frobeniusP().multiply(ft3);
+        // 20
+        y6 = y6.conjugate();
+        // 21
+        GFp12 t0 = y6.square().multiply(y4).multiply(y5);
+        // 22
+        GFp12 t1 = y3.multiply(y5).multiply(y6);
+        // 23
+        t0 = t0.multiply(y2);
+        // 24
+        t1 = t1.square().multiply(t0).square();
+        // 25
+        t0 = t1.multiply(y1);
+        // 26
+        t1 = t1.multiply(y0);
+        // 27
+        t0 = t0.square();
+        // 28
+        f = t1.multiply(t0);
 
         return f;
     }
@@ -246,21 +313,21 @@ public class Pairing {
 
     }
 
-    private class LineEval {
-        private G2 t;
-        private GFp12 l;
+    private class LineFuncReturn {
+        private TwistPoint t;
+        private GFp12 line;
 
-        public LineEval(G2 t, GFp12 l) {
+        public LineFuncReturn(TwistPoint t, GFp12 line) {
             this.t = t;
-            this.l = l;
+            this.line = line;
         }
 
-        public G2 getT() {
+        public TwistPoint getT() {
             return t;
         }
 
-        public GFp12 getL() {
-            return l;
+        public GFp12 getLine() {
+            return line;
         }
     }
 }

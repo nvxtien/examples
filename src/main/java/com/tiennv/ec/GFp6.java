@@ -1,5 +1,7 @@
 package com.tiennv.ec;
 
+import java.math.BigInteger;
+
 import static com.tiennv.ec.Constants.XI_2PMinus2_Over3;
 import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
 
@@ -254,5 +256,10 @@ public class GFp6 {
 
     public GFp6 negate() {
         return new GFp6(getX().negate(), getY().negate(), getZ().negate());
+    }
+
+    public GFp6 multiplyGFp(GFp k) {
+        BigInteger b = k.getValue();
+        return new GFp6(this.getX().multiplyScalar(b), this.getY().multiplyScalar(b), this.getZ().multiplyScalar(b));
     }
 }
