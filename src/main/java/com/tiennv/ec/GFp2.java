@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * Fp2 = Fp[X]/(X^2 − β), where β is a quadratic non-residue in Fp.(β = −5)
+ * Fp2 = Fp[X]/(X^2 − β), where β is a quadratic non-residue in Fp.(β = −1)
  * An element A = a0 + a1X ∈ Fp2
  * B = b0 + b1X ∈ Fp2
  *
@@ -27,7 +27,12 @@ import java.util.Objects;
 public class GFp2 {
     private final GFp x;
     private final GFp y;
-    private static final BigInteger beta = BigInteger.valueOf(-1); // why?
+    private static final BigInteger beta = BigInteger.valueOf(-1);
+
+    public GFp2() {
+        this.x = new GFp(BigInteger.ZERO);
+        this.y = new GFp(BigInteger.ZERO);
+    }
 
     /**
      * We construct a quadratic extension as Fp2 = Fp[X]/(X^2 − β), where β is a
