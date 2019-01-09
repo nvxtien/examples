@@ -25,14 +25,13 @@ import java.util.Objects;
  * https://eprint.iacr.org/2006/471.pdf
  */
 public class GFp2 {
-    private final GFp x;
-    private final GFp y;
+
+    private GFp x;
+    private GFp y;
     private static final BigInteger beta = BigInteger.valueOf(-1);
 
-    public GFp2() {
-        this.x = new GFp(BigInteger.ZERO);
-        this.y = new GFp(BigInteger.ZERO);
-    }
+    public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
+    public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
 
     /**
      * We construct a quadratic extension as Fp2 = Fp[X]/(X^2 − β), where β is a

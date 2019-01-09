@@ -32,7 +32,6 @@ public class GFp {
      */
     public GFp(final BigInteger x) {
         this.x = x.mod(Fp256BN.p);
-//        System.out.println(x);
     }
 
     /**

@@ -159,4 +159,9 @@ public class GFp2Test {
         GFp2 cọnjugateXi = new GFp2(new GFp(new BigInteger("-1")), new GFp(new BigInteger("3")));
         cọnjugateXi.print();
     }
+
+    public void nullTest() {
+        GFp2 gFp2 = GFp2.ONE;
+        gFp2.setOne();
+    }
 }

@@ -74,22 +74,22 @@ public class Pairing {
         t1 = t6.multiplyScalar(xp.getValue()).multiplyScalar(BigInteger.valueOf(2));
 
         // 22
-        GFp6 l0, l1;
-        GFp2 a2 = ZERO;
-        GFp2 a1 = ZERO;
-        GFp2 a0 = t10;
-        l0 = new GFp6(a2, a1, a0);
-        l1 = new GFp6(a2, t9, t1);
+//        GFp6 l0, l1;
+//        GFp2 a2 = ZERO;
+//        GFp2 a1 = ZERO;
+//        GFp2 a0 = t10;
 
-        TwistPoint t = TwistPoint.POINT_INFINITY;
-        GFp12 l = new GFp12();
+        GFp2 zero = GFp2.ZERO;
 
-        t.setX(xt);
-        t.setY(yt);
-        t.setZ(zt);
+        GFp6 l0 = new GFp6(zero, zero, t10);
+        GFp6 l1 = new GFp6(zero, t9, t1);
+        GFp12 l = new GFp12(l1, l0);
 
-        l.setX(l1);
-        l.setY(l0);
+        TwistPoint t = new TwistPoint(xt, yt, zt);
+
+//        t.setX(xt);
+//        t.setY(yt);
+//        t.setZ(zt);
 
         return new LineFuncReturn(t, l);
     }
@@ -98,8 +98,6 @@ public class Pairing {
      * Algorithm 26 Point doubling and line evaluation
      * @param q
      * @param p
-     * @param t
-     * @param l
      */
     public  LineFuncReturn lineFuncDouble(TwistPoint q, CurvePoint p) {
 
@@ -132,20 +130,15 @@ public class Pairing {
         t0 = zt.multiply(zq.square()).multiplyScalar(BigInteger.valueOf(2));
         t0 = t0.multiplyScalar(yp.getValue());
 
-        GFp6 l0, l1;
-        GFp2 zero = ZERO;
-        l0 = new GFp6(zero, zero, t0);
-        l1 = new GFp6(zero, t6, t3);
+        GFp2 zero = GFp2.ZERO;
+        GFp6 l0 = new GFp6(zero, zero, t0);
+        GFp6 l1 = new GFp6(zero, t6, t3);
+        GFp12 l = new GFp12(l1, l0);
 
-        TwistPoint t = TwistPoint.POINT_INFINITY;
-        GFp12 l = new GFp12();
-
-        t.setX(xt);
-        t.setY(yt);
-        t.setZ(zt);
-
-        l.setX(l1);
-        l.setY(l0);
+        TwistPoint t = new TwistPoint(xt, yt, zt);
+//        t.setX(xt);
+//        t.setY(yt);
+//        t.setZ(zt);
 
         return new LineFuncReturn(t, l);
     }
@@ -178,7 +171,7 @@ public class Pairing {
         GFp2 b0 = line.getY().getZ();
         GFp2 b10 = line.getX().getZ();
         GFp2 b11 = line.getX().getY();
-        GFp2 zero = new GFp2();
+        GFp2 zero = GFp2.ZERO;
 
         GFp6 t2 = new GFp6(zero, b11, b0.add(b10));
 
