@@ -289,7 +289,8 @@ public class OptimalAtePairing {
      */
     public GFp12 finalExponentiation(GFp12 inp) {
 
-        GFp12 f = new GFp12();// set one
+        GFp12 f;
+
         // 1) f1 ← ¯f
         GFp12 f1 = inp.conjugate();
 
