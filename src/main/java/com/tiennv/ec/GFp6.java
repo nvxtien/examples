@@ -7,7 +7,7 @@ import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
 
 /**
  * Cubic over quadratic
- * Multiplication and Squaring on Pairing-Friendly Fields
+ * Multiplication and Squaring on OptimalAtePairing-Friendly Fields
  * Section 6.2
  * https://eprint.iacr.org/2006/471.pdf
  *
@@ -25,7 +25,11 @@ import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
  * ai ∈ Fp2
  */
 public class GFp6 {
-    private final GFp2 x, y, z;
+
+    public static final GFp6 ONE = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
+    public static final GFp6 ZERO = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
+
+    private final GFp2 x, y, z; // xv^2 + yv + z
 
     public GFp6(final GFp2 x, final GFp2 y, final GFp2 z) {
         this.x = x;
@@ -105,7 +109,7 @@ public class GFp6 {
 
     /**
      * High-Speed Software Implementation of the
-     * Optimal Ate Pairing over Barreto–Naehrig Curves
+     * Optimal Ate OptimalAtePairing over Barreto–Naehrig Curves
      *
      * Algorithm 17 Inverse in Fp6 = Fp2 [v]/(v^3 − ξ).
      * Require: A = a0 + a1v + a2v^2 ∈ Fp6 .

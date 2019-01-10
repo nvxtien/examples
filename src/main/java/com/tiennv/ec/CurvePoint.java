@@ -8,8 +8,6 @@ import static com.tiennv.ec.Constants.*;
 public class CurvePoint {
 
     public static final CurvePoint POINT_INFINITY = new CurvePoint();
-    public static final GFp ZERO = new GFp(BigInteger.ZERO);
-    public static final GFp ONE = new GFp(BigInteger.ONE);
 
     private GFp x, y, z;
     private EllipticCurve curve;
@@ -18,9 +16,9 @@ public class CurvePoint {
 
     private CurvePoint() {
         this.curve = null;
-        this.x = ZERO;
-        this.y = ONE;
-        this.z = ZERO;
+        this.x = GFp.ZERO;
+        this.y = GFp.ONE;
+        this.z = GFp.ZERO;
     }
 
     public CurvePoint(EllipticCurve curve, GFp x, GFp y, GFp z) {
@@ -34,7 +32,7 @@ public class CurvePoint {
         this.curve = curve;
         this.x = ax;
         this.y = ay;
-        this.z = ONE;
+        this.z = GFp.ONE;
         return this;
     }
 
@@ -340,9 +338,9 @@ public class CurvePoint {
 
     public void setInfinity() {
         this.curve = null;
-        this.x = ZERO;
-        this.y = ONE;
-        this.z = ZERO;
+        this.x = GFp.ZERO;
+        this.y = GFp.ONE;
+        this.z = GFp.ZERO;
 //        return new CurvePoint();
     }
 
@@ -356,6 +354,6 @@ public class CurvePoint {
         GFp invz2 = invz.square();
         this.y = this.y.multiply(invz2);
         this.x = this.x.multiply(invz2);
-        this.z = ONE;
+        this.z = GFp.ONE;
     }
 }

@@ -8,22 +8,17 @@ import static com.tiennv.ec.Constants.*;
 public class TwistPoint {
 
     public static final TwistPoint POINT_INFINITY = new TwistPoint();
-    public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
-    public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
 
     private GFp2 x, y, z;
 
     private EllipticCurve curve;
-
-
-
     // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
 
     private TwistPoint() {
         this.curve = null;
-        this.x = ZERO;
-        this.y = ONE;
-        this.z = ZERO;
+        this.x = GFp2.ZERO;
+        this.y = GFp2.ONE;
+        this.z = GFp2.ZERO;
     }
 
     public TwistPoint(final GFp2 x, final GFp2 y, final GFp2 z) {
@@ -32,25 +27,6 @@ public class TwistPoint {
         this.y = y;
         this.z = z;
     }
-
-    /*public TwistPoint fromAffine(EllipticCurve curve, BigInteger ax, BigInteger ay) {
-        this.curve = curve;
-        this.x = ax;
-        this.y = ay;
-        this.z = BigInteger.ONE;
-        return this;
-    }*/
-
-    /*public Point toAffine() {
-        if (this.isInfinity()) {
-            return Point.POINT_INFINITY;
-        }
-        BigInteger invz = this.z.modInverse(this.curve.getP());
-        BigInteger invz2 = invz.modPow(BigInteger.valueOf(2), this.curve.getP());
-        BigInteger invz3 = invz.multiply(invz2).mod(this.curve.getP());
-
-        return Point.newPoint(curve, this.x.multiply(invz2).mod(this.curve.getP()), this.y.multiply(invz3).mod(this.curve.getP()));
-    }*/
 
     public TwistPoint negate() {
         return new TwistPoint(this.x, this.y.negate(), this.z);
@@ -267,6 +243,10 @@ public class TwistPoint {
 //        GFp2 y = Y3.mod(p);
 //        GFp2 z = Z3.mod(p);
 
+        GFp2 x = X3;
+        GFp2 y = Y3;
+        GFp2 z = Z3;
+
         return new TwistPoint(x, y, z);
     }
 
@@ -301,7 +281,7 @@ public class TwistPoint {
     }
 
     public boolean isInfinity() {
-        return this.z.equals(ZERO);
+        return this.z.equals(GFp2.ZERO);
     }
 
     public GFp2 getX() {
@@ -360,9 +340,9 @@ public class TwistPoint {
 
     public void setInfinity() {
         this.curve = null;
-        this.x = ZERO;
-        this.y = ONE;
-        this.z = ZERO;
+        this.x = GFp2.ZERO;
+        this.y = GFp2.ONE;
+        this.z = GFp2.ZERO;
     }
 
     public void transformAffine() {
@@ -375,6 +355,6 @@ public class TwistPoint {
         GFp2 invz2 = invz.square();
         this.y = this.y.multiply(invz2);
         this.x = this.x.multiply(invz2);
-        this.z = ONE;
+        this.z = GFp2.ONE;
     }
 }

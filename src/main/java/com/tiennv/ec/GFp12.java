@@ -3,14 +3,14 @@ package com.tiennv.ec;
 import java.math.BigInteger;
 import java.util.List;
 
-import static com.tiennv.ec.Constants.XI;
 import static com.tiennv.ec.Constants.XI_PMinus1_Over6;
 
 public class GFp12 {
 
-    private GFp6 x;
+    public static final GFp12 ONE = new GFp12(GFp6.ZERO, GFp6.ONE);
+    public static final GFp12 ZERO = new GFp12(GFp6.ZERO, GFp6.ZERO);
 
-    private GFp6 y;
+    private GFp6 x, y; // xw + y
 
     public GFp12() {
 //        this.x = null;

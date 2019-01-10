@@ -10,7 +10,7 @@ import static com.tiennv.ec.Fp256BN.gamma13;
 /**
  * https://eprint.iacr.org/2010/354.pdf
  */
-public class Pairing {
+public class OptimalAtePairing {
 
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
     public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
@@ -21,14 +21,14 @@ public class Pairing {
 
     /**
      * Algorithm 27 Point addition and line evaluation
-     * lR,Q(P)
+     * l_(R,Q)(P)
      * T = Q + R
      * @param q
      * @param r
      * @param p
 //     * @param r2
      */
-    public LineFuncReturn lineFuncAdd(TwistPoint q, TwistPoint r, CurvePoint p) {
+    public LineFuncReturn lineFuncAdd(TwistPoint r, TwistPoint q, CurvePoint p) {
 
         GFp2 xq = q.getX();
         GFp2 yq = q.getY();
@@ -181,37 +181,55 @@ public class Pairing {
         return new GFp12(c1, c0);
     }
 
+    /**
+     * Algorithm 1 Optimal ate pairing over Barreto–Naehrig curves.
+     *
+     * @param q
+     * @param p
+     * @return
+     */
     public GFp12 miller(final TwistPoint q, final CurvePoint p) {
+
         q.transformAffine();
         p.transformAffine();
 
+        // 2. T ← Q, f ← 1;
         TwistPoint t = q;
-        TwistPoint negq = q.negate();
+        GFp12 f = GFp12.ONE;
 
-        GFp12 f = new GFp12();
-        f.setOne();
+        TwistPoint minusQ = q.negate();
 
         LineFuncReturn ret;
         for (int i = NAF.size()-2; i>=0; i--) {
 
-            ret = lineFuncDouble(q, p);
-            t = ret.getT();
-            f = ret.getLine();
+            // 4. f ← f^2 · l_(T ,T) (P); T ← 2T;
+            f = f.square();
+
+            ret = lineFuncDouble(t, p); // l_(T ,T) (P)
+            t = ret.getT(); // 2T
+//            f = f.multiply(ret.getLine());
+            f = mulLine(f, ret.getLine());
 
             if (NAF.get(i).equals(BigInteger.valueOf(-1))) {
-                ret = lineFuncAdd(q, t, p);
+                // 6. f ← f · l_(T ,−Q)(P); T ← T − Q;
+                ret = lineFuncAdd(t, minusQ, p);
                 t = ret.getT();
-                f = ret.getLine();
+//                f = f.multiply(ret.getLine());
+                f = mulLine(f, ret.getLine());
+
+
             } else if (NAF.get(i).equals(BigInteger.valueOf(1))) {
-                ret = lineFuncAdd(negq, t, p);
+                // 8. f ← f · l-(T ,Q)(P); T ← T + Q;
+                ret = lineFuncAdd(t, q, p);
                 t = ret.getT();
-                f = ret.getLine();
+//                f = f.multiply(ret.getLine());
+                f = mulLine(f, ret.getLine());
+
             }
 
         }
 
-        // Q1 ← πp(Q); Q2 ← πp2 (Q);
-        // Q1 ← (x^p, y^p)
+        // 11. Q1 ← πp(Q); Q2 ← πp2 (Q);
 
         EllipticCurve twist;
 
@@ -232,12 +250,6 @@ public class Pairing {
         GFp2 z = ONE;
         TwistPoint q1 = new TwistPoint(x, y, z);
 
-//        x;// = q.getX().conjugate().multiply(gamma12);
-//        y = q.getY();
-//        z = ONE;
-//        q1;// = new TwistPoint(x, y, z);
-
-
         // (xω^2)^p^2=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
@@ -252,7 +264,17 @@ public class Pairing {
 
         TwistPoint minusQ2 = new TwistPoint(x, y, z);
 
+        // 12. f ← f · l_(T ,Q1)(P); T ← T + Q1;
+        ret = lineFuncAdd(t, q1, p);
+        t = ret.getT();
+        f = mulLine(f, ret.getLine());
 
+        // 13. f ← f · l_(T ,−Q2)(P); T ← T − Q2;
+        ret = lineFuncAdd(t, minusQ2, p);
+//        t = ret.getT();
+        f = mulLine(f, ret.getLine());
+
+//        f = finalExponentiation(f);
 
         // x^p^2 =
         // xv^2p^2
@@ -336,8 +358,15 @@ public class Pairing {
         return f;
     }
 
-    public void optimalAte(G2 a, G1 b) {
+    public GFp12 optimalAte(TwistPoint a, CurvePoint b) {
+        GFp12 e = miller(a, b);
+        GFp12 ret = finalExponentiation(e);
 
+        if (a.isInfinity() || b.isInfinity()) {
+            ret = GFp12.ONE;
+        }
+
+        return ret;
     }
 
     private class LineFuncReturn {

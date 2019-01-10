@@ -26,12 +26,14 @@ import java.util.Objects;
  */
 public class GFp2 {
 
-    private GFp x;
-    private GFp y;
-    private static final BigInteger beta = BigInteger.valueOf(-1);
 
     public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
+
+    private static final BigInteger BETA = BigInteger.valueOf(-1);
+
+    private GFp x, y; // xu + y
+
 
     /**
      * We construct a quadratic extension as Fp2 = Fp[X]/(X^2 − β), where β is a
@@ -61,7 +63,7 @@ public class GFp2 {
     public GFp2 multiply(final GFp2 that) {
         GFp v0 = this.y.multiply(that.y);
         GFp v1 = this.x.multiply(that.x);
-        GFp c0 = v0.add(v1.multiplyScalar(beta));
+        GFp c0 = v0.add(v1.multiplyScalar(BETA));
         // example: (0 + 1)(1 + 3) - 3 - 0 = 1
         GFp c1 = this.x.add(this.y).multiply(that.x.add(that.y)).subtract(v0).subtract(v1);
 
@@ -124,7 +126,7 @@ public class GFp2 {
     public GFp2 inverse() {
         GFp t0 = this.y.square();
         GFp t1 = this.x.square();
-        t0 = t0.subtract(t1.multiplyScalar(beta));
+        t0 = t0.subtract(t1.multiplyScalar(BETA));
         t1 = t0.inverse();
         GFp c0 = this.y.multiply(t1);
         GFp c1 = this.x.multiply(t1).negate();

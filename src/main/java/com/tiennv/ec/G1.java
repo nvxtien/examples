@@ -9,51 +9,21 @@ import java.math.BigInteger;
  */
 public class G1 {
 
-    private final EllipticCurve curve  = new EllipticCurve(Fp256BN.p, Fp256BN.a, Fp256BN.b);
+    private CurvePoint curvePoint;
 
-    private BigInteger x, y, z;
-    private Jacobian r;
-
-    public G1(final BigInteger x, final BigInteger y, final BigInteger z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.r = new Jacobian(curve, this.x, this.y, this.z);
+    public G1(final CurvePoint p) {
+        this.curvePoint = p;
     }
 
-    public G1 add(final G1 g) {
-        Jacobian s = new Jacobian(curve, g.getX(), g.getY(), g.getZ());
-        Jacobian t = r.add(s);
-        return new G1(t.getX(), t.getY(), t.getZ());
-    }
-
-    public G1 subtract(final G1 g) {
-        return this.add(g.negate());
-    }
-
-    public G1 doubling() {
-        Jacobian t = r.doubling();
-        return new G1(t.getX(), t.getY(), t.getZ());
+    public G1 add(final G1 a, final G1 b) {
+        return new G1(a.getCurvePoint().add(b.getCurvePoint()));
     }
 
     public G1 multiply(final BigInteger k) {
-        Jacobian t = r.scalarMultiply(k);
-        return new G1(t.getX(), t.getY(), t.getZ());
+        return new G1(this.curvePoint.scalarMultiply(k));
     }
 
-    public G1 negate() {
-        return new G1(this.getX(), this.getY().negate(), this.getZ());
-    }
-
-    public BigInteger getX() {
-        return x;
-    }
-
-    public BigInteger getY() {
-        return y;
-    }
-
-    public BigInteger getZ() {
-        return z;
+    public CurvePoint getCurvePoint() {
+        return curvePoint;
     }
 }
