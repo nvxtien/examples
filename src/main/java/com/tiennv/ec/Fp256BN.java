@@ -2,6 +2,8 @@ package com.tiennv.ec;
 
 import java.math.BigInteger;
 
+import static com.tiennv.ec.Constants.SIX;
+
 /**
  * Fp256BN implements a particular bilinear group at the 128-bit security level.
  *
@@ -32,6 +34,7 @@ public class Fp256BN {
     public static final BigInteger p = new BigInteger("65000549695646603732796438742359905742825358107623003571877145026864184071783", 10);
     public static final BigInteger a = new BigInteger("0", 10);
     public static final BigInteger b = new BigInteger("3", 10);
+    public static final BigInteger n = new BigInteger("65000549695646603732796438742359905742570406053903786389881062969044166799969", 10);
 
     public static final GFp2 gamma12 = new GFp2(new GFp(new BigInteger("26098034838977895781559542626833399156321265654106457577426020397262786167059")),
             new GFp(new BigInteger("15931493369629630809226283458085260090334794394361662678240713231519278691715")));

@@ -15,10 +15,17 @@ public class TwistPointTest {
 
         TwistPoint GENERATOR = new TwistPoint(x, y, z);
 
-        TwistPoint a = GENERATOR.scalarMultiply(Fp256BN.p.subtract(BigInteger.ONE));
+        TwistPoint a = GENERATOR.scalarMultiply(Fp256BN.n);
         a.print();
 
-        a = GENERATOR.scalarMultiply(Fp256BN.p);
-        a.print();
+        TwistPoint a1 = GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
+        a1.print();
+
+        TwistPoint a2 = GENERATOR.scalarMultiply(BigInteger.ONE);
+        a2.print();
+
+        TwistPoint a3 = a1.add(a2);
+        a3.print();
+
     }
 }

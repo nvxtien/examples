@@ -78,6 +78,7 @@ public class Jacobian {
         }
 
         if (this.isInfinity()) {
+            that.print();
             return that;
         }
 
@@ -111,7 +112,9 @@ public class Jacobian {
         BigInteger y3 = r.multiply(v.subtract(x3)).subtract(BigInteger.valueOf(2).multiply(s1).multiply(j));
         BigInteger z3 = h.multiply(this.z.add(that.z).pow(2).subtract(z1z1).subtract(z2z2));
 
-        return new Jacobian(this.curve, x3.mod(p), y3.mod(p), z3.mod(p));
+        Jacobian jacobian = new Jacobian(this.curve, x3.mod(p), y3.mod(p), z3.mod(p));
+
+        return jacobian;
     }
 
     /**
@@ -241,6 +244,7 @@ public class Jacobian {
         BigInteger YY = y1.pow(2);
         BigInteger YYYY = YY.pow(2);
         BigInteger ZZ = this.z.pow(2);
+
         BigInteger S = TWO.multiply(this.x.add(YY).pow(2).subtract(XX).subtract(YYYY));
         BigInteger M = THREE.multiply(XX).add(this.curve.getA().multiply(ZZ.pow(2)));
         BigInteger T = M.pow(2).subtract(TWO.multiply(S));
@@ -253,7 +257,9 @@ public class Jacobian {
         BigInteger y = Y3.mod(p);
         BigInteger z = Z3.mod(p);
 
-        return new Jacobian(this.curve, x, y, z);
+        Jacobian jacobian = new Jacobian(this.curve, x, y, z);
+
+        return jacobian;
     }
 
     /**
@@ -266,8 +272,8 @@ public class Jacobian {
     public Jacobian scalarMultiply(BigInteger k) {
         Jacobian r0 = new Jacobian(this.curve, BigInteger.ONE, BigInteger.ONE, BigInteger.ZERO);
         Jacobian r1 = this;
-        int n = k.bitLength();
 
+        int n = k.bitLength();
         for (int i=n-1; i>=0; i--) {
             BigInteger b = k.shiftRight(i).and(BigInteger.ONE);
             if (b.equals(BigInteger.ONE)) {

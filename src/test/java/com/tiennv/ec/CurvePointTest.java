@@ -10,24 +10,27 @@ public class CurvePointTest {
     public void generatorTest() {
 
         EllipticCurve ellipticCurve = new EllipticCurve(Fp256BN.p, Fp256BN.a, Fp256BN.b);
-        System.out.println(ellipticCurve.toString());
-
         BigInteger jx = BigInteger.valueOf(1);
-        BigInteger jy = BigInteger.valueOf(2);
+        BigInteger jy = BigInteger.valueOf(-2);
         BigInteger jz = BigInteger.ONE;
-        Jacobian r = new Jacobian(ellipticCurve, jx, jy, jz);
-        System.out.println("Jacobian point: " + r.toString());
+        Jacobian r1 = new Jacobian(ellipticCurve, jx, jy, jz);
+        r1 = r1.scalarMultiply(Fp256BN.n);
+//        r1.print();
 
-        GFp x = new GFp(new BigInteger("1"));
-        GFp y = new GFp(new BigInteger("2"));
-        GFp z = new GFp(new BigInteger("1"));
+        Point r = r1.toAffine();
+        r.print();
 
-        CurvePoint GENERATOR = new CurvePoint(x, y, z);
+        CurvePoint curvePoint = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n);
+        curvePoint.print();
 
-        CurvePoint a = GENERATOR.scalarMultiply(Fp256BN.p.subtract(BigInteger.valueOf(3)));
-        a.print();
+        CurvePoint curvePoint1 = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
+        curvePoint1.print();
 
-        a = GENERATOR.scalarMultiply(Fp256BN.p);
-        a.print();
+        CurvePoint curvePoint2 = CurvePoint.GENERATOR.scalarMultiply(BigInteger.ONE);
+        curvePoint2.print();
+
+        CurvePoint curvePoint3 = curvePoint1.add(curvePoint2);
+        curvePoint3.print();
+
     }
 }

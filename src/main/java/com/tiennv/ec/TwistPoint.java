@@ -84,7 +84,7 @@ public class TwistPoint {
 
         GFp2 h = u2.subtract(u1);
 //        GFp2 i = BigInteger.valueOf(2).multiply(h).pow(2);
-        GFp2 i = h.square().multiplyScalar(BigInteger.valueOf(2));
+        GFp2 i = h.multiplyScalar(BigInteger.valueOf(2)).square();
         GFp2 j = h.multiply(i);
 
 //        BigInteger r = BigInteger.valueOf(2).multiply(s2.subtract(s1));
@@ -348,6 +348,7 @@ public class TwistPoint {
     public void transformAffine() {
         if (this.isInfinity()) {
             setInfinity();
+            return;
         }
         GFp2 invz = this.z.inverse();
         this.y = this.y.multiply(invz);

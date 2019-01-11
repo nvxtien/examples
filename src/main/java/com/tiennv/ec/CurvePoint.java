@@ -114,7 +114,7 @@ public class CurvePoint {
         GFp s2 = that.y.multiply(this.z).multiply(z1z1);
 
         GFp h = u2.subtract(u1);
-        GFp i = h.square().multiplyScalar(BigInteger.valueOf(2));
+        GFp i = h.multiplyScalar(BigInteger.valueOf(2)).square();
         GFp j = h.multiply(i);
 
         GFp r = s2.subtract(s1).multiplyScalar(BigInteger.valueOf(2));
@@ -124,7 +124,9 @@ public class CurvePoint {
         GFp y3 = r.multiply(v.subtract(x3)).subtract(s1.multiply(j).multiplyScalar(BigInteger.valueOf(2)));
         GFp z3 = h.multiply(this.z.add(that.z).square().subtract(z1z1).subtract(z2z2));
 
-        return new CurvePoint(x3, y3, z3);
+        CurvePoint curvePoint = new CurvePoint(x3, y3, z3);
+
+        return curvePoint;
     }
 
     /**
@@ -260,20 +262,22 @@ public class CurvePoint {
         GFp YY = y1.square();
         GFp YYYY = YY.square();
         GFp ZZ = this.z.square();
+
         GFp S = this.x.add(YY).square().subtract(XX).subtract(YYYY).multiplyScalar(TWO);
         GFp M = XX.multiplyScalar(THREE).add(ZZ.square().multiplyScalar(Fp256BN.a));
         GFp T = M.square().subtract(S.multiplyScalar(TWO));
         GFp X3 = T;
 
         GFp Y3 = M.multiply(S.subtract(T)).subtract(YYYY.multiplyScalar(EIGHT));
-
         GFp Z3 = y1.add(z1).square().subtract(YY).subtract(ZZ);
 
-        GFp x = X3;
-        GFp y = Y3;
-        GFp z = Z3;
+//        GFp x = X3;
+//        GFp y = Y3;
+//        GFp z = Z3;
 
-        return new CurvePoint(x, y, z);
+        CurvePoint curvePoint = new CurvePoint(X3, Y3, Z3);
+
+        return curvePoint;
     }
 
     /**
@@ -285,12 +289,9 @@ public class CurvePoint {
      */
     public CurvePoint scalarMultiply(BigInteger k) {
         CurvePoint r0 = CurvePoint.POINT_INFINITY;
-
         CurvePoint r1 = this;
-        r1.print();
 
         int n = k.bitLength();
-
         for (int i=n-1; i>=0; i--) {
             BigInteger b = k.shiftRight(i).and(BigInteger.ONE);
             if (b.equals(BigInteger.ONE)) {
@@ -302,15 +303,13 @@ public class CurvePoint {
             }
         }
 
-//        r0.transformAffine();
+        r0.transformAffine();
 
-//        BigInteger p = this.curve.getP();
-//        return new CurvePoint(r0.getX(), r0.getY(), r0.getZ());
         return r0;
     }
 
     public boolean isInfinity() {
-        return this.z.equals(BigInteger.ZERO);
+        return this.z.equals(GFp.ZERO);
     }
 
     public GFp getX() {
@@ -331,7 +330,7 @@ public class CurvePoint {
 
     @Override
     public String toString() {
-        return "Jacobian{" +
+        return "CurePoint{" +
                 "x=" + x +
                 ", y=" + y +
                 ", z=" + z +
@@ -354,16 +353,15 @@ public class CurvePoint {
     }
 
     public void setInfinity() {
-//        this.curve = null;
         this.x = GFp.ZERO;
         this.y = GFp.ONE;
         this.z = GFp.ZERO;
-//        return new CurvePoint();
     }
 
     public void transformAffine() {
         if (this.isInfinity()) {
             setInfinity();
+            return;
         }
         GFp invz = this.z.inverse();
         this.y = this.y.multiply(invz);
