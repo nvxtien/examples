@@ -8,14 +8,15 @@ import static com.tiennv.ec.Constants.*;
 public class TwistPoint {
 
     public static final TwistPoint POINT_INFINITY = new TwistPoint();
+    public static final TwistPoint GENERATOR = new TwistPoint();
 
     private GFp2 x, y, z;
 
-    private EllipticCurve curve;
+//    private EllipticCurve curve;
     // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
 
     private TwistPoint() {
-        this.curve = null;
+//        this.curve = null;
         this.x = GFp2.ZERO;
         this.y = GFp2.ONE;
         this.z = GFp2.ZERO;
@@ -69,7 +70,7 @@ public class TwistPoint {
             return this.doubling();
         }
 
-        BigInteger p = this.curve.getP();
+//        BigInteger p = this.curve.getP();
 
 //        BigInteger z1z1 = this.z.pow(2);
         GFp2 z1z1 = this.z.square();
@@ -198,7 +199,7 @@ public class TwistPoint {
             return this;
         }
 
-        BigInteger p = this.curve.getP();
+//        BigInteger p = this.curve.getP();
         /*
         // Efficient elliptic curve exponentiation
         //https://pdfs.semanticscholar.org/9d61/ae363a68fc3403173e29e333388f8c0fe0b5.pdf
@@ -232,7 +233,7 @@ public class TwistPoint {
         GFp2 ZZ = this.z.square();
         GFp2 S = (this.x.add(YY).square().subtract(XX).subtract(YYYY)).multiplyScalar(TWO);
 
-        GFp2 M = XX.multiplyScalar(THREE).add(ZZ.square().multiplyScalar(this.curve.getA()));
+        GFp2 M = XX.multiplyScalar(THREE).add(ZZ.square().multiplyScalar(Fp256BN.a));
         GFp2 T = M.square().subtract(S.multiplyScalar(TWO));
         GFp2 X3 = T;
 
@@ -277,7 +278,9 @@ public class TwistPoint {
             }
         }
 
-        return new TwistPoint(r0.getX(), r0.getY(), r0.getZ());
+        r0.transformAffine();
+
+        return r0;
     }
 
     public boolean isInfinity() {
@@ -318,7 +321,6 @@ public class TwistPoint {
                 "x=" + x +
                 ", y=" + y +
                 ", z=" + z +
-                ", curve=" + curve +
                 '}';
     }
 
@@ -329,17 +331,15 @@ public class TwistPoint {
         TwistPoint jacobian = (TwistPoint) o;
         return x.equals(jacobian.x) &&
                 y.equals(jacobian.y) &&
-                z.equals(jacobian.z) &&
-                curve.equals(jacobian.curve);
+                z.equals(jacobian.z);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z, curve);
+        return Objects.hash(x, y, z);
     }
 
     public void setInfinity() {
-        this.curve = null;
         this.x = GFp2.ZERO;
         this.y = GFp2.ONE;
         this.z = GFp2.ZERO;

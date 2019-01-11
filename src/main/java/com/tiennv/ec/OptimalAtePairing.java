@@ -38,8 +38,9 @@ public class OptimalAtePairing {
         GFp2 yr = r.getY();
         GFp2 zr = r.getZ();
 
-        GFp xp = new GFp(p.toAffine().getAffineX());
-        GFp yp = new GFp(p.toAffine().getAffineY());
+        p.transformAffine();
+        GFp xp = p.getX();
+        GFp yp = p.getY();
 
         GFp2 t0 = q.getX().multiply(r.getZ().square());
         GFp2 t1 = (q.getY().add(r.getZ())).square().subtract(yq.square()).subtract(zr.square());
@@ -105,8 +106,9 @@ public class OptimalAtePairing {
         GFp2 yq = q.getY();
         GFp2 zq = q.getZ();
 
-        GFp xp = new GFp(p.toAffine().getAffineX());
-        GFp yp = new GFp(p.toAffine().getAffineY());
+        p.transformAffine();
+        GFp xp = p.getX();
+        GFp yp = p.getY();
 
         GFp2 t0 = xq.square();
         GFp2 t1 = yq.square();

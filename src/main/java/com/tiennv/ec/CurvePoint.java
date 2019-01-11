@@ -8,47 +8,61 @@ import static com.tiennv.ec.Constants.*;
 public class CurvePoint {
 
     public static final CurvePoint POINT_INFINITY = new CurvePoint();
+    public static final CurvePoint GENERATOR = new CurvePoint(GFp.ONE, new GFp(BigInteger.valueOf(2)), GFp.ONE);
+
 
     private GFp x, y, z;
-    private EllipticCurve curve;
+//    private EllipticCurve curve;
 
     // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
 
     private CurvePoint() {
-        this.curve = null;
+//        this.curve = null;
         this.x = GFp.ZERO;
         this.y = GFp.ONE;
         this.z = GFp.ZERO;
     }
 
     public CurvePoint(EllipticCurve curve, GFp x, GFp y, GFp z) {
-        this.curve = curve;
+//        this.curve = curve;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public CurvePoint(GFp x, GFp y, GFp z) {
+//        this.curve = curve;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
     public CurvePoint fromAffine(EllipticCurve curve, GFp ax, GFp ay) {
-        this.curve = curve;
+//        this.curve = curve;
         this.x = ax;
         this.y = ay;
         this.z = GFp.ONE;
         return this;
     }
 
-    public Point toAffine() {
+    /*public void transformAffine() {
         if (this.isInfinity()) {
-            return Point.POINT_INFINITY;
+            setInfinity();
         }
         GFp invz = this.z.inverse();
         GFp invz2 = invz.square();
         GFp invz3 = invz.multiply(invz2);
 
-        return Point.newPoint(curve, this.x.multiply(invz2).getValue(), this.y.multiply(invz3).getValue());
-    }
+        this.x = this.x.multiply(invz2);
+        this.y = this.y.multiply(invz3);
+        this.z = GFp.ONE;
+
+
+//        return Point.newPoint(curve, this.x.multiply(invz2).getValue(), this.y.multiply(invz3).getValue());
+    }*/
 
     public CurvePoint negate() {
-        return new CurvePoint(this.curve, this.x, this.y.negate(), this.z);
+        return new CurvePoint(this.x, this.y.negate(), this.z);
     }
 
     /**
@@ -88,7 +102,7 @@ public class CurvePoint {
             return this.doubling();
         }
 
-        BigInteger p = this.curve.getP();
+        BigInteger p = Fp256BN.p;
 
         GFp z1z1 = this.z.square();
         GFp z2z2 = that.getZ().square();
@@ -110,7 +124,7 @@ public class CurvePoint {
         GFp y3 = r.multiply(v.subtract(x3)).subtract(s1.multiply(j).multiplyScalar(BigInteger.valueOf(2)));
         GFp z3 = h.multiply(this.z.add(that.z).square().subtract(z1z1).subtract(z2z2));
 
-        return new CurvePoint(this.curve, x3, y3, z3);
+        return new CurvePoint(x3, y3, z3);
     }
 
     /**
@@ -154,7 +168,7 @@ public class CurvePoint {
      */
     public CurvePoint doubling2() {
 
-        BigInteger p = this.curve.getP();
+//        BigInteger p = this.curve.getP();
 
         /*BigInteger a = this.x.pow(2);
         BigInteger b = this.y.pow(2);
@@ -200,7 +214,7 @@ public class CurvePoint {
         GFp y = Y3;
         GFp z = Z3;
 
-        return new CurvePoint(this.curve, x, y, z);
+        return new CurvePoint(x, y, z);
     }
 
     /**
@@ -214,7 +228,7 @@ public class CurvePoint {
             return this;
         }
 
-        BigInteger p = this.curve.getP();
+//        BigInteger p = Fp256BN.p;
         /*
         // Efficient elliptic curve exponentiation
         //https://pdfs.semanticscholar.org/9d61/ae363a68fc3403173e29e333388f8c0fe0b5.pdf
@@ -247,7 +261,7 @@ public class CurvePoint {
         GFp YYYY = YY.square();
         GFp ZZ = this.z.square();
         GFp S = this.x.add(YY).square().subtract(XX).subtract(YYYY).multiplyScalar(TWO);
-        GFp M = XX.multiplyScalar(THREE).add(ZZ.square().multiplyScalar(this.curve.getA()));
+        GFp M = XX.multiplyScalar(THREE).add(ZZ.square().multiplyScalar(Fp256BN.a));
         GFp T = M.square().subtract(S.multiplyScalar(TWO));
         GFp X3 = T;
 
@@ -259,7 +273,7 @@ public class CurvePoint {
         GFp y = Y3;
         GFp z = Z3;
 
-        return new CurvePoint(this.curve, x, y, z);
+        return new CurvePoint(x, y, z);
     }
 
     /**
@@ -270,9 +284,11 @@ public class CurvePoint {
      * @return
      */
     public CurvePoint scalarMultiply(BigInteger k) {
-        CurvePoint r0 = new CurvePoint();
+        CurvePoint r0 = CurvePoint.POINT_INFINITY;
 
         CurvePoint r1 = this;
+        r1.print();
+
         int n = k.bitLength();
 
         for (int i=n-1; i>=0; i--) {
@@ -286,8 +302,11 @@ public class CurvePoint {
             }
         }
 
+//        r0.transformAffine();
+
 //        BigInteger p = this.curve.getP();
-        return new CurvePoint(this.curve, r0.getX(), r0.getY(), r0.getZ());
+//        return new CurvePoint(r0.getX(), r0.getY(), r0.getZ());
+        return r0;
     }
 
     public boolean isInfinity() {
@@ -316,7 +335,6 @@ public class CurvePoint {
                 "x=" + x +
                 ", y=" + y +
                 ", z=" + z +
-                ", curve=" + curve +
                 '}';
     }
 
@@ -327,17 +345,16 @@ public class CurvePoint {
         CurvePoint jacobian = (CurvePoint) o;
         return x.equals(jacobian.x) &&
                 y.equals(jacobian.y) &&
-                z.equals(jacobian.z) &&
-                curve.equals(jacobian.curve);
+                z.equals(jacobian.z);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z, curve);
+        return Objects.hash(x, y, z);
     }
 
     public void setInfinity() {
-        this.curve = null;
+//        this.curve = null;
         this.x = GFp.ZERO;
         this.y = GFp.ONE;
         this.z = GFp.ZERO;

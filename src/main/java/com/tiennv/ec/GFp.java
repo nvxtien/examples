@@ -101,9 +101,7 @@ public class GFp {
 
     @Override
     public String toString() {
-        return "GFp{" +
-                "value=" + x +
-                '}';
+        return "GFp{" + x + '}';
     }
 
     @Override
