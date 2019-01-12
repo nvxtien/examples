@@ -15,18 +15,13 @@ public class TwistPoint {
 
     private GFp2 x, y, z;
 
-//    private EllipticCurve curve;
-    // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
-
     private TwistPoint() {
-//        this.curve = null;
         this.x = GFp2.ZERO;
         this.y = GFp2.ONE;
         this.z = GFp2.ZERO;
     }
 
     public TwistPoint(final GFp2 x, final GFp2 y, final GFp2 z) {
-//        this.curve = curve;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -73,9 +68,6 @@ public class TwistPoint {
             return this.doubling();
         }
 
-//        BigInteger p = this.curve.getP();
-
-//        BigInteger z1z1 = this.z.pow(2);
         GFp2 z1z1 = this.z.square();
         GFp2 z2z2 = that.getZ().square();
 
@@ -86,23 +78,15 @@ public class TwistPoint {
         GFp2 s2 = that.y.multiply(this.z).multiply(z1z1);
 
         GFp2 h = u2.subtract(u1);
-//        GFp2 i = BigInteger.valueOf(2).multiply(h).pow(2);
         GFp2 i = h.multiplyScalar(BigInteger.valueOf(2)).square();
         GFp2 j = h.multiply(i);
 
-//        BigInteger r = BigInteger.valueOf(2).multiply(s2.subtract(s1));
         GFp2 r = s2.subtract(s1).multiplyScalar(BigInteger.valueOf(2));
         GFp2 v = u1.multiply(i);
 
-//        BigInteger x3 = r.pow(2).subtract(j).subtract(BigInteger.valueOf(2).multiply(v));
         GFp2 x3 = r.square().subtract(j).subtract(v.multiplyScalar(BigInteger.valueOf(2)));
-
-//        BigInteger y3 = r.multiply(v.subtract(x3)).subtract(BigInteger.valueOf(2).multiply(s1).multiply(j));
         GFp2 y3 = r.multiply(v.subtract(x3)).subtract(s1.multiply(j).multiplyScalar(BigInteger.valueOf(2)));
-
-//        BigInteger z3 = h.multiply(this.z.add(that.z).pow(2).subtract(z1z1).subtract(z2z2));
         GFp2 z3 = h.multiply(this.z.add(that.z).square().subtract(z1z1).subtract(z2z2));
-
 
         return new TwistPoint(x3, y3, z3);
     }
@@ -202,31 +186,6 @@ public class TwistPoint {
             return this;
         }
 
-//        BigInteger p = this.curve.getP();
-        /*
-        // Efficient elliptic curve exponentiation
-        //https://pdfs.semanticscholar.org/9d61/ae363a68fc3403173e29e333388f8c0fe0b5.pdf
-
-        BigInteger a = this.x.pow(2);
-        BigInteger b = this.y.pow(2);
-
-        BigInteger S = FOUR.multiply(this.x).multiply(b).mod(p);
-
-
-        BigInteger M = THREE.multiply(a).add(this.curve.getA().multiply(this.z.pow(4))).mod(p);
-        BigInteger T = TWO.negate().multiply(S).add(M.pow(2)).mod(p);
-
-
-        BigInteger x3 = T;
-        System.out.println("x3: " + x3);
-
-
-        BigInteger y3 = M.multiply(S.subtract(T)).subtract(EIGHT.multiply(b.pow(2))).mod(p);
-        System.out.println("y3: " + y3);
-
-
-        BigInteger z3 = TWO.multiply(this.y).multiply(this.z).mod(p);
-        System.out.println("z3: " + z3);*/
         GFp2 y1 = this.y;
         GFp2 z1 = this.z;
 
@@ -243,10 +202,6 @@ public class TwistPoint {
         GFp2 Y3 = M.multiply(S.subtract(T)).subtract(YYYY.multiplyScalar(EIGHT));
         GFp2 Z3 = y1.add(z1).square().subtract(YY).subtract(ZZ);
 
-//        GFp2 x = X3.mod(p);
-//        GFp2 y = Y3.mod(p);
-//        GFp2 z = Z3.mod(p);
-
         GFp2 x = X3;
         GFp2 y = Y3;
         GFp2 z = Z3;
@@ -262,11 +217,7 @@ public class TwistPoint {
      * @return
      */
     public TwistPoint scalarMultiply(BigInteger k) {
-//        GFp2 a = new GFp2(BigInteger.ZERO, BigInteger.ZERO);
-//        GFp2 b = new GFp2(BigInteger.ZERO, BigInteger.ONE);
-//        GFp2 c = new GFp2(BigInteger.ZERO, BigInteger.ZERO);
-//
-        TwistPoint r0 = new TwistPoint();
+        TwistPoint r0 = TwistPoint.POINT_INFINITY;
         TwistPoint r1 = this;
         int n = k.bitLength();
 
@@ -303,6 +254,26 @@ public class TwistPoint {
 
         return right.equals(left);
 
+    }
+
+    public void setInfinity() {
+        this.x = GFp2.ZERO;
+        this.y = GFp2.ONE;
+        this.z = GFp2.ZERO;
+    }
+
+    public void transformAffine() {
+        if (this.isInfinity()) {
+            setInfinity();
+            return;
+        }
+        GFp2 invz = this.z.inverse();
+        this.y = this.y.multiply(invz);
+
+        GFp2 invz2 = invz.square();
+        this.y = this.y.multiply(invz2);
+        this.x = this.x.multiply(invz2);
+        this.z = GFp2.ONE;
     }
 
     public GFp2 getX() {
@@ -355,25 +326,5 @@ public class TwistPoint {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
-    }
-
-    public void setInfinity() {
-        this.x = GFp2.ZERO;
-        this.y = GFp2.ONE;
-        this.z = GFp2.ZERO;
-    }
-
-    public void transformAffine() {
-        if (this.isInfinity()) {
-            setInfinity();
-            return;
-        }
-        GFp2 invz = this.z.inverse();
-        this.y = this.y.multiply(invz);
-
-        GFp2 invz2 = invz.square();
-        this.y = this.y.multiply(invz2);
-        this.x = this.x.multiply(invz2);
-        this.z = GFp2.ONE;
     }
 }
