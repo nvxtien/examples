@@ -8,7 +8,10 @@ import static com.tiennv.ec.Constants.*;
 public class TwistPoint {
 
     public static final TwistPoint POINT_INFINITY = new TwistPoint();
-    public static final TwistPoint GENERATOR = new TwistPoint();
+    public static final TwistPoint GENERATOR = new TwistPoint(
+            new GFp2(new GFp(new BigInteger("14724174682622052940986165482626236747847319389687389512541395505603041913280")), new GFp(new BigInteger("37424606102024299561407771484254094594031112686590073402399442737767613131649"))),
+            new GFp2(new GFp(new BigInteger("61038153163717895188228273712547317652324179401407967262561698487768888832017")), new GFp(new BigInteger("59551325687088189320634909215304067641249418107957154536830189592986703697967"))),
+            new GFp2(new GFp(new BigInteger("0")), new GFp(new BigInteger("1"))));
 
     private GFp2 x, y, z;
 
@@ -285,6 +288,21 @@ public class TwistPoint {
 
     public boolean isInfinity() {
         return this.z.equals(GFp2.ZERO);
+    }
+
+    public boolean isOnCurve() {
+        assert !this.isInfinity() : "The point must be on the elliptic curve";
+
+        if (!this.z.equals(GFp2.ONE)) {
+            transformAffine();
+        }
+
+        GFp2 x3 = this.x.square().multiply(this.x);
+        GFp2 right = x3.add(TWIST_B);
+        GFp2 left = this.y.square();
+
+        return right.equals(left);
+
     }
 
     public GFp2 getX() {

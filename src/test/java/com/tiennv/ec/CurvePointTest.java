@@ -4,33 +4,39 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
+import static com.tiennv.ec.Constants.XI;
+import static org.junit.Assert.assertTrue;
+
 public class CurvePointTest {
 
     @Test
     public void generatorTest() {
 
-        EllipticCurve ellipticCurve = new EllipticCurve(Fp256BN.p, Fp256BN.a, Fp256BN.b);
-        BigInteger jx = BigInteger.valueOf(1);
-        BigInteger jy = BigInteger.valueOf(-2);
-        BigInteger jz = BigInteger.ONE;
-        Jacobian r1 = new Jacobian(ellipticCurve, jx, jy, jz);
-        r1 = r1.scalarMultiply(Fp256BN.n);
-//        r1.print();
-
-        Point r = r1.toAffine();
-        r.print();
+        assertTrue(CurvePoint.GENERATOR.isOnCurve());
 
         CurvePoint curvePoint = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n);
         curvePoint.print();
+        assertTrue(curvePoint.isInfinity());
 
         CurvePoint curvePoint1 = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
         curvePoint1.print();
+        assertTrue(curvePoint1.isOnCurve());
 
         CurvePoint curvePoint2 = CurvePoint.GENERATOR.scalarMultiply(BigInteger.ONE);
         curvePoint2.print();
+        assertTrue(curvePoint2.isOnCurve());
 
         CurvePoint curvePoint3 = curvePoint1.add(curvePoint2);
         curvePoint3.print();
+        assertTrue(curvePoint3.isInfinity());
+
+        XI.inverse().print();
+
+        XI.print();
+
+        XI.square().print();
+
+        XI.inverse().multiplyScalar(Fp256BN.b).print();
 
     }
 }

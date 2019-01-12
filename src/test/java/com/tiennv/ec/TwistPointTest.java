@@ -4,6 +4,12 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
+import static com.tiennv.ec.Constants.XI;
+import static com.tiennv.ec.Fp256BN.gamma12;
+import static com.tiennv.ec.Fp256BN.gamma13;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class TwistPointTest {
 
     @Test
@@ -13,19 +19,35 @@ public class TwistPointTest {
         GFp2 y = new GFp2(new GFp(new BigInteger("20666913350058776956210519119118544732556678129809273996262322366050359951122")), new GFp(new BigInteger("17778617556404439934652658462602675281523610326338642107814333856843981424549")));
         GFp2 z = new GFp2(new GFp(new BigInteger("0")), new GFp(new BigInteger("1")));
 
-        TwistPoint GENERATOR = new TwistPoint(x, y, z);
+        TwistPoint twistPoint = new TwistPoint(x, y, z);
+        assertTrue(twistPoint.isOnCurve());
 
-        TwistPoint a = GENERATOR.scalarMultiply(Fp256BN.n);
-        a.print();
+        GFp2 bXIminusOne = XI.inverse().multiplyScalar(BigInteger.valueOf(3));
+        bXIminusOne.print();
 
-        TwistPoint a1 = GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
-        a1.print();
+        x = x.conjugate().multiply(gamma12);
+        y = y.conjugate().multiply(gamma13);
+        z = GFp2.ONE;
 
-        TwistPoint a2 = GENERATOR.scalarMultiply(BigInteger.ONE);
-        a2.print();
+        TwistPoint q1 = new TwistPoint(x, y, z);
+        q1.print();
+        assertTrue(q1.isOnCurve());
 
+        TwistPoint q2 = q1.scalarMultiply(Fp256BN.n);
+        assertTrue(q2.isInfinity());
+        q2.print();
+
+        TwistPoint a = TwistPoint.GENERATOR.scalarMultiply(Fp256BN.n);
+        assertTrue(a.isInfinity());
+
+
+        TwistPoint a1 = TwistPoint.GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
+        TwistPoint a2 = TwistPoint.GENERATOR.scalarMultiply(BigInteger.ONE);
         TwistPoint a3 = a1.add(a2);
-        a3.print();
+        assertTrue(a3.isInfinity());
+        assertEquals(a1, a2.negate());
+        a1.print();
+        a2.negate().print();
 
     }
 }

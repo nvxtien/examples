@@ -312,6 +312,41 @@ public class CurvePoint {
         return this.z.equals(GFp.ZERO);
     }
 
+    public boolean isOnCurve() {
+        assert !this.isInfinity() : "The point must be on the elliptic curve";
+
+        if (!this.z.equals(GFp.ONE)) {
+            transformAffine();
+        }
+
+        GFp x3 = this.x.square().multiply(this.x);
+        GFp right = x3.add(new GFp(Fp256BN.b));
+        GFp left = this.y.square();
+
+        return right.equals(left);
+
+    }
+
+    public void transformAffine() {
+        if (this.isInfinity()) {
+            setInfinity();
+            return;
+        }
+        GFp invz = this.z.inverse();
+        this.y = this.y.multiply(invz);
+
+        GFp invz2 = invz.square();
+        this.y = this.y.multiply(invz2);
+        this.x = this.x.multiply(invz2);
+        this.z = GFp.ONE;
+    }
+
+    public void setInfinity() {
+        this.x = GFp.ZERO;
+        this.y = GFp.ONE;
+        this.z = GFp.ZERO;
+    }
+
     public GFp getX() {
         return x;
     }
@@ -350,25 +385,5 @@ public class CurvePoint {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
-    }
-
-    public void setInfinity() {
-        this.x = GFp.ZERO;
-        this.y = GFp.ONE;
-        this.z = GFp.ZERO;
-    }
-
-    public void transformAffine() {
-        if (this.isInfinity()) {
-            setInfinity();
-            return;
-        }
-        GFp invz = this.z.inverse();
-        this.y = this.y.multiply(invz);
-
-        GFp invz2 = invz.square();
-        this.y = this.y.multiply(invz2);
-        this.x = this.x.multiply(invz2);
-        this.z = GFp.ONE;
     }
 }
