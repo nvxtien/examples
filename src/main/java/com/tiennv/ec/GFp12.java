@@ -3,7 +3,8 @@ package com.tiennv.ec;
 import java.math.BigInteger;
 import java.util.List;
 
-import static com.tiennv.ec.Constants.XI_PMinus1_Over6;
+import static com.tiennv.ec.Constants.XI_2PSquared_Minus1_Over6;
+import static com.tiennv.ec.Constants.XI_P_Minus1_Over6;
 
 public class GFp12 {
 
@@ -12,11 +13,11 @@ public class GFp12 {
 
     private GFp6 x, y; // xw + y
 
-    public GFp12() {
+    /*public GFp12() {
 //        this.x = null;
 //        this.y = null;
         setOne();
-    }
+    }*/
 
     public GFp12(final GFp6 x, final GFp6 y) {
         this.x = x;
@@ -58,14 +59,21 @@ public class GFp12 {
      * @return
      */
     public GFp12 frobeniusP() {
-        GFp6 x = this.getX().frobeniusP().multiplyScalar(XI_PMinus1_Over6);
+        GFp6 x = this.getX().frobeniusP().multiplyScalar(XI_P_Minus1_Over6);
         GFp6 y = this.getY().frobeniusP();
 
         return new GFp12(x, y);
     }
 
+    /**
+     * pi2(xw + y) = pi2(x).w^p^2 + pi2(y)
+     *  pi2(x).w^p = pi2(x).w.w^6(p^2-1)/6
+     *            = pi2(x).w.ξ^(p^2-1)/6 // w^6 = ξ
+     *
+     * @return
+     */
     public GFp12 frobeniusP2() {
-        GFp6 x = this.getX().frobeniusP2().multiplyScalar(XI_PMinus1_Over6);
+        GFp6 x = this.getX().frobeniusP2().multiplyGFp(new GFp(XI_2PSquared_Minus1_Over6));
         GFp6 y = this.getY().frobeniusP2();
 
         return new GFp12(x, y);
@@ -87,15 +95,15 @@ public class GFp12 {
         this.y = y;
     }
 
-    public void setOne() {
+    /*public void setOne() {
         this.x.setZero();
         this.y.setOne();
-    }
+    }*/
 
-    public void setZero() {
+    /*public void setZero() {
         this.x.setZero();
         this.y.setZero();
-    }
+    }*/
 
     public GFp12 conjugate() {
         return new GFp12(getX().negate(), getY());
@@ -192,5 +200,13 @@ public class GFp12 {
         c0 = c0.add(c2);
 
         return new GFp12(c1, c0);
+    }
+
+    @Override
+    public String toString() {
+        return "GFp12{" +
+                "x=" + x.toString() +
+                ", y=" + y.toString() +
+                '}';
     }
 }

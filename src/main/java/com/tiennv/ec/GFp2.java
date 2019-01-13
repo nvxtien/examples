@@ -29,7 +29,6 @@ public class GFp2 {
 
     public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
-
     private static final BigInteger BETA = BigInteger.valueOf(-1);
 
     private GFp x, y; // xu + y
@@ -160,17 +159,9 @@ public class GFp2 {
         return new GFp2(a, b);
     }
 
-    @Override
-    public String toString() {
-        return "GFp2{" +
-                "x=" + x.getValue() +
-                ", y=" + y.getValue() +
-                '}';
-    }
-
     public GFp2 exp(BigInteger k) {
 
-        GFp2 r0 = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
+        GFp2 r0 = GFp2.ONE;
         GFp2 r1 = this;
 
         int n = k.bitLength();
@@ -205,18 +196,22 @@ public class GFp2 {
         return r0;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GFp2 gFp2 = (GFp2) o;
-        return x.equals(gFp2.x) &&
-                y.equals(gFp2.y);
+    /**
+     * x^2 = β
+     * pi(ax + b) = pi(a)pi(x) + pi(b)
+     *            = a.x^p + b
+     *            = a.x.x^2(p-1)/2 + b
+     *            = a.x.β^(p-1)/2 + b
+     *            = a.x.(-1) + b // -1 = β^(p-1)/2 (mod p)
+     *            = conjugate(ax + b)
+     * @return
+     */
+    public GFp2 frobeniusP() {
+        return this.conjugate();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
+    public GFp2 conjugate() {
+        return new GFp2(this.x.negate(), this.y);
     }
 
     public void setOne() {
@@ -241,21 +236,25 @@ public class GFp2 {
         System.out.println(toString());
     }
 
-    /**
-     * x^2 = β
-     * pi(ax + b) = pi(a)pi(x) + pi(b)
-     *            = a.x^p + b
-     *            = a.x.x^2(p-1)/2 + b
-     *            = a.x.β^(p-1)/2 + b
-     *            = a.x.(-1) + b // -1 = β^(p-1)/2 (mod p)
-     *            = conjugate(ax + b)
-     * @return
-     */
-    public GFp2 frobeniusP() {
-        return this.conjugate();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GFp2 gFp2 = (GFp2) o;
+        return x.equals(gFp2.x) &&
+                y.equals(gFp2.y);
     }
 
-    public GFp2 conjugate() {
-        return new GFp2(this.x.negate(), this.y);
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "GFp2{" +
+                "x=" + x.getValue() +
+                ", y=" + y.getValue() +
+                '}';
     }
 }

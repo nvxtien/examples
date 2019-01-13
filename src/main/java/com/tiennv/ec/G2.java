@@ -39,6 +39,6 @@ public class G2 {
     }
 
     public void print() {
-        System.out.print(toString());
+        System.out.println(toString());
     }
 }

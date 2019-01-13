@@ -8,7 +8,7 @@ import static com.tiennv.ec.Constants.*;
 public class CurvePoint {
 
     public static final CurvePoint POINT_INFINITY = new CurvePoint();
-    public static final CurvePoint GENERATOR = new CurvePoint(GFp.ONE, new GFp(BigInteger.valueOf(2)), GFp.ONE);
+    public static final CurvePoint GENERATOR = new CurvePoint(GFp.ONE, new GFp(BigInteger.valueOf(-2)), GFp.ONE);
 
 
     private GFp x, y, z;

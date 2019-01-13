@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
+import static com.tiennv.ec.Constants.TWO;
 import static org.junit.Assert.assertEquals;
 
 public class GFp2Test {
@@ -151,10 +152,62 @@ public class GFp2Test {
         xiToPSquaredMinus1Over3.print();
 
         // ξ^(p^2-1)/2
-        GFp2 xiToPSquaredMinus1Over2 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
-        xiToPSquaredMinus1Over2.print();
-        xiToPSquaredMinus1Over2 = xiToPSquaredMinus1Over2.negate();
-        xiToPSquaredMinus1Over2.print();
+        // XI_PSquared_Minus1_Over2
+        // GFp2{x=0, y=65000549695646603732796438742359905742825358107623003571877145026864184071782}
+        System.out.println("XI_PSquared_Minus1_Over2");
+        GFp2 XI_PSquared_Minus1_Over2 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)));
+        XI_PSquared_Minus1_Over2.print();
+
+        XI_PSquared_Minus1_Over2 = XI_PSquared_Minus1_Over2.negate();
+        XI_PSquared_Minus1_Over2.print();
+
+
+        // ξ^(p-1)/6
+        // XI_P_Minus1_Over6
+        // GFp2{x=8669379979083712429711189836753509758585994370025260553045152614783263110636, y=19998038925833620163537568958541907098007303196759855091367510456613536016040}
+        System.out.println("XI_P_Minus1_Over6");
+        GFp2 XI_P_Minus1_Over6 = gFp2.exp(Fp256BN.p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(6)));
+        XI_P_Minus1_Over6.print();
+
+        // ξ^(2p^2-2)/3
+        // XI_2PSquared_Minus2_Over3
+        System.out.println("XI_2PSquared_Minus2_Over3");
+        GFp2 XI_2PSquared_Minus2_Over3 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).multiply(BigInteger.valueOf(2)).subtract(BigInteger.valueOf(2)).divide(BigInteger.valueOf(3)));
+        XI_2PSquared_Minus2_Over3.print();
+
+        // ξ^(2p^2-1)/3
+        // XI_2PSquared_Minus1_Over3
+        System.out.println("XI_2PSquared_Minus1_Over3");
+        GFp2 XI_2PSquared_Minus1_Over3 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).multiply(BigInteger.valueOf(2)).subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(3)));
+        XI_2PSquared_Minus1_Over3.print();
+
+        // ξ^(p^2-1)/3
+        // XI_PSquared_Minus1_Over3
+        System.out.println("XI_PSquared_Minus1_Over3");
+        GFp2 XI_PSquared_Minus1_Over3 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(3)));
+        XI_PSquared_Minus1_Over3.print();
+
+        // GFp2{x=19885131339612776214803633203834694332692106372356013117629940868870585019582, y=21645619881471562101905880913352894726728173167203616652430647841922248593627}
+        // xiTo2PMinus2Over3 is ξ^((2p-2)/3) where ξ = i+3.
+//        var xiTo2PMinus2Over3 = &gfP2{bigFromBase10("19885131339612776214803633203834694332692106372356013117629940868870585019582"), bigFromBase10("21645619881471562101905880913352894726728173167203616652430647841922248593627")}
+        // XI_2P_Minus2_Over3
+        // ξ^(2p-2)/3
+        System.out.println("XI_2P_Minus2_Over3");
+        GFp2 XI_2P_Minus2_Over3 = gFp2.exp(Fp256BN.p.multiply(TWO).subtract(TWO).divide(BigInteger.valueOf(3)));
+        XI_2P_Minus2_Over3.print();
+
+        // XI_P_Minus1_Over3
+        // ξ^(p-1)/3
+        System.out.println("XI_P_Minus1_Over3");
+        GFp2 XI_P_Minus1_Over3 = gFp2.exp(Fp256BN.p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(3)));
+        XI_P_Minus1_Over3.print();
+
+        // XI_2PSquared_Minus1_Over6
+        // ξ^(p^2-1)/6
+        System.out.println("XI_2PSquared_Minus1_Over6");
+        GFp2 XI_2PSquared_Minus1_Over6 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(6)));
+        XI_2PSquared_Minus1_Over6.print();
+
 
         GFp2 cọnjugateXi = new GFp2(new GFp(new BigInteger("-1")), new GFp(new BigInteger("3")));
         cọnjugateXi.print();

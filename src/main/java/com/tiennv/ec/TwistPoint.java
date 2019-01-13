@@ -8,10 +8,36 @@ import static com.tiennv.ec.Constants.*;
 public class TwistPoint {
 
     public static final TwistPoint POINT_INFINITY = new TwistPoint();
-    public static final TwistPoint GENERATOR = new TwistPoint(
+    /*public static final TwistPoint GENERATOR = new TwistPoint(
             new GFp2(new GFp(new BigInteger("14724174682622052940986165482626236747847319389687389512541395505603041913280")), new GFp(new BigInteger("37424606102024299561407771484254094594031112686590073402399442737767613131649"))),
             new GFp2(new GFp(new BigInteger("61038153163717895188228273712547317652324179401407967262561698487768888832017")), new GFp(new BigInteger("59551325687088189320634909215304067641249418107957154536830189592986703697967"))),
+            new GFp2(new GFp(new BigInteger("0")), new GFp(new BigInteger("1"))));*/
+
+    public static final TwistPoint GENERATOR = new TwistPoint(
+            new GFp2(new GFp(new BigInteger("21167961636542580255011770066570541300993051739349375019639421053990175267184")), new GFp(new BigInteger("64746500191241794695844075326670126197795977525365406531717464316923369116492"))),
+            new GFp2(new GFp(new BigInteger("20666913350058776956210519119118544732556678129809273996262322366050359951122")), new GFp(new BigInteger("17778617556404439934652658462602675281523610326338642107814333856843981424549"))),
             new GFp2(new GFp(new BigInteger("0")), new GFp(new BigInteger("1"))));
+
+
+    // twistGen is the generator of group G₂.
+    /*var twistGen = &twistPoint{
+	&gfP2{
+            bigFromBase10("21167961636542580255011770066570541300993051739349375019639421053990175267184"),
+                    bigFromBase10("64746500191241794695844075326670126197795977525365406531717464316923369116492"),
+        },
+	&gfP2{
+            bigFromBase10("20666913350058776956210519119118544732556678129809273996262322366050359951122"),
+                    bigFromBase10("17778617556404439934652658462602675281523610326338642107814333856843981424549"),
+        },
+	&gfP2{
+            bigFromBase10("0"),
+                    bigFromBase10("1"),
+        },
+	&gfP2{
+            bigFromBase10("0"),
+                    bigFromBase10("1"),
+        },
+    }*/
 
     private GFp2 x, y, z;
 

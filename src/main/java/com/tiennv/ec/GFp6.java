@@ -2,8 +2,7 @@ package com.tiennv.ec;
 
 import java.math.BigInteger;
 
-import static com.tiennv.ec.Constants.XI_2PMinus2_Over3;
-import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
+import static com.tiennv.ec.Constants.*;
 
 /**
  * Cubic over quadratic
@@ -27,9 +26,11 @@ import static com.tiennv.ec.Constants.XI_PMinus1_Over3;
 public class GFp6 {
 
     public static final GFp6 ONE = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
-    public static final GFp6 ZERO = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
+    public static final GFp6 ZERO = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ZERO);
 
-    private final GFp2 x, y, z; // xv^2 + yv + z
+    private final GFp2 x;
+    private final GFp2 y;
+    private final GFp2 z; // xv^2 + yv + z
 
     public GFp6(final GFp2 x, final GFp2 y, final GFp2 z) {
         this.x = x;
@@ -203,14 +204,14 @@ public class GFp6 {
         return z;
     }
 
-    public void setOne() {
+    /*public void setOne() {
         this.x.setZero();
         this.y.setZero();
         this.z.setOne();
-    }
+    }*/
 
-    public void setZero() {
-    }
+    /*public void setZero() {
+    }*/
 
     /**
      * v^3 = ξ
@@ -224,8 +225,8 @@ public class GFp6 {
      * @return
      */
     public GFp6 frobeniusP() {
-        GFp2 x = this.getX().frobeniusP().multiply(XI_2PMinus2_Over3);
-        GFp2 y = this.getY().frobeniusP().multiply(XI_PMinus1_Over3);
+        GFp2 x = this.getX().frobeniusP().multiply(XI_2P_Minus2_Over3);
+        GFp2 y = this.getY().frobeniusP().multiply(XI_P_Minus1_Over3);
         GFp2 z = this.getZ().frobeniusP();
 
         return new GFp6(x, y, z);
@@ -247,15 +248,14 @@ public class GFp6 {
      *         pi2(y).v^p^2 =  y.v.v^3(p^2-1)/3
      *         pi2(y).v^p^2 =  y.v.ξ^(p^2-1)/3
      *
+     *               pi2(z) = z
+     *
      * @return
      */
     public GFp6 frobeniusP2() {
-
-        // XI_2PSquaredMinus2_Over3
-        // XI_2PSquaredMinus1_Over3
-
-
-        return null;
+        GFp2 x = this.x.multiplyScalar(XI_2PSquared_Minus2_Over3);
+        GFp2 y = this.y.multiplyScalar(XI_PSquared_Minus1_Over3);
+        return new GFp6(x, y, this.z);
     }
 
     public GFp6 negate() {
@@ -265,5 +265,14 @@ public class GFp6 {
     public GFp6 multiplyGFp(GFp k) {
         BigInteger b = k.getValue();
         return new GFp6(this.getX().multiplyScalar(b), this.getY().multiplyScalar(b), this.getZ().multiplyScalar(b));
+    }
+
+    @Override
+    public String toString() {
+        return "GFp6{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

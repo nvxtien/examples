@@ -203,32 +203,20 @@ public class OptimalAtePairing {
 
         LineFuncReturn ret;
         for (int i = NAF.size()-2; i>=0; i--) {
-
-            // 4. f ← f^2 · l_(T ,T) (P); T ← 2T;
-            f = f.square();
-
+            f = f.square(); // 4. f ← f^2 · l_(T ,T) (P); T ← 2T;
             ret = lineFuncDouble(t, p); // l_(T ,T) (P)
             t = ret.getT(); // 2T
-//            f = f.multiply(ret.getLine());
             f = mulLine(f, ret.getLine());
 
             if (NAF.get(i).equals(BigInteger.valueOf(-1))) {
-                // 6. f ← f · l_(T ,−Q)(P); T ← T − Q;
-                ret = lineFuncAdd(t, minusQ, p);
+                ret = lineFuncAdd(t, minusQ, p); // 6. f ← f · l_(T ,−Q)(P); T ← T − Q;
                 t = ret.getT();
-//                f = f.multiply(ret.getLine());
                 f = mulLine(f, ret.getLine());
-
-
             } else if (NAF.get(i).equals(BigInteger.valueOf(1))) {
-                // 8. f ← f · l-(T ,Q)(P); T ← T + Q;
-                ret = lineFuncAdd(t, q, p);
+                ret = lineFuncAdd(t, q, p); // 8. f ← f · l-(T ,Q)(P); T ← T + Q;
                 t = ret.getT();
-//                f = f.multiply(ret.getLine());
                 f = mulLine(f, ret.getLine());
-
             }
-
         }
 
         // 11. Q1 ← πp(Q); Q2 ← πp2 (Q);
@@ -240,7 +228,7 @@ public class OptimalAtePairing {
         // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
         //                  = x^p.ω^2.ξ^(p-1)/3
         GFp2 x = q.getX().conjugate().multiply(gamma12);
-//        GFp2 x = q.getX().conjugate().multiply(XI_PMinus1_Over3);
+//        GFp2 x = q.getX().conjugate().multiply(XI_P_Minus1_Over3);
 
 
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ω^(3p-3)
@@ -256,7 +244,7 @@ public class OptimalAtePairing {
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p^2=x^p.ω^2.ω^(2p^2-2)
         //                  = x^p.ω^2.ξ^(p^2-1)/3
-        x = q.getX().conjugate().multiply(XI_PSquaredMinus1_Over3);
+        x = q.getX().conjugate().multiplyScalar(XI_PSquared_Minus1_Over3);
 
         // (yω^3)^p^2=y^p.ω^3p^2=y^p.ω^3.ω^(3p^2-3)
         // ξ^6 = ω
@@ -266,20 +254,11 @@ public class OptimalAtePairing {
 
         TwistPoint minusQ2 = new TwistPoint(x, y, z);
 
-        // 12. f ← f · l_(T ,Q1)(P); T ← T + Q1;
-        ret = lineFuncAdd(t, q1, p);
+        ret = lineFuncAdd(t, q1, p); // 12. f ← f · l_(T ,Q1)(P); T ← T + Q1;
         t = ret.getT();
         f = mulLine(f, ret.getLine());
-
-        // 13. f ← f · l_(T ,−Q2)(P); T ← T − Q2;
-        ret = lineFuncAdd(t, minusQ2, p);
-//        t = ret.getT();
+        ret = lineFuncAdd(t, minusQ2, p); // 13. f ← f · l_(T ,−Q2)(P); T ← T − Q2;
         f = mulLine(f, ret.getLine());
-
-//        f = finalExponentiation(f);
-
-        // x^p^2 =
-        // xv^2p^2
 
         return f;
     }

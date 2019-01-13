@@ -15,16 +15,42 @@ public class Constants {
     public static final GFp2 XI = new GFp2(new GFp(BigInteger.ONE), new GFp(THREE));
     public static final GFp2 TWIST_B = new GFp2(new GFp(new BigInteger("6500054969564660373279643874235990574282535810762300357187714502686418407178")), new GFp(new BigInteger("45500384786952622612957507119651934019977750675336102500314001518804928850249")));
 
-    public static final GFp2 XI_2PMinus2_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
-    public static final GFp2 XI_PMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
-    public static final GFp2 XI_PMinus1_Over6 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+    /*var twistB = &gfP2{
+        bigFromBase10("6500054969564660373279643874235990574282535810762300357187714502686418407178"),
+                bigFromBase10("45500384786952622612957507119651934019977750675336102500314001518804928850249"),
+    }*/
 
-    public static final GFp2 XI_PMinus1_Over2 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
 
-    public static final GFp2 XI_2PSquaredMinus2_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
-    public static final GFp2 XI_2PSquaredMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
 
-    public static final GFp2 XI_PSquaredMinus1_Over3 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
-    public static final GFp2 XI_PSquaredMinus1_Over2 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+    public static final GFp2 XI_2P_Minus2_Over3 = new GFp2(new GFp(new BigInteger("19885131339612776214803633203834694332692106372356013117629940868870585019582")), new GFp(new BigInteger("21645619881471562101905880913352894726728173167203616652430647841922248593627")));
+//    XI_2P_Minus2_Over3
+    // xiTo2PMinus2Over3 is ξ^((2p-2)/3) where ξ = i+3.
+//        var xiTo2PMinus2Over3 = &gfP2{bigFromBase10("19885131339612776214803633203834694332692106372356013117629940868870585019582"), bigFromBase10("21645619881471562101905880913352894726728173167203616652430647841922248593627")}
 
+    public static final GFp2 XI_P_Minus1_Over3 = new GFp2(new GFp(new BigInteger("26098034838977895781559542626833399156321265654106457577426020397262786167059")), new GFp(new BigInteger("15931493369629630809226283458085260090334794394361662678240713231519278691715")));
+//    XI_P_Minus1_Over3
+// xiToPMinus1Over3 is ξ^((p-1)/3) where ξ = i+3.
+//var xiToPMinus1Over3 = &gfP2{bigFromBase10("26098034838977895781559542626833399156321265654106457577426020397262786167059"), bigFromBase10("15931493369629630809226283458085260090334794394361662678240713231519278691715")}
+
+
+    public static final GFp2 XI_P_Minus1_Over6 = new GFp2(new GFp(new BigInteger("8669379979083712429711189836753509758585994370025260553045152614783263110636")), new GFp(new BigInteger("19998038925833620163537568958541907098007303196759855091367510456613536016040")));
+
+//    public static final GFp2 XI_PMinus1_Over2 = new GFp2(new GFp(BigInteger.ONE), new GFp(BigInteger.valueOf(3)));
+
+//    public static final GFp2 XI_2PSquared_Minus2_Over3 = new GFp2(new GFp(BigInteger.ZERO), new GFp(new BigInteger("4985783334309134261147736404674766913742361673560802634030")));
+    public static final BigInteger XI_2PSquared_Minus2_Over3 = new BigInteger("4985783334309134261147736404674766913742361673560802634030");
+
+    public static final BigInteger XI_2PSquared_Minus1_Over6 = new BigInteger("65000549695646603727810655408050771481677621702948236658134783353303381437753");
+    // xiToPSquaredMinus1Over6 is ξ^((1p²-1)/6) where ξ = i+3 (a cubic root of -1, mod p).
+//    var xiToPSquaredMinus1Over6 = bigFromBase10("65000549695646603727810655408050771481677621702948236658134783353303381437753")
+//    XI_2PSquared_Minus1_Over6
+//    GFp2{x=0, y=65000549695646603727810655408050771481677621702948236658134783353303381437753}
+
+    // XI_2PSquaredMinus2_Over3
+    // XI_PSquared_Minus1_Over3
+
+//    public static final GFp2 XI_PSquared_Minus1_Over3 = new GFp2(GFp.ZERO, new GFp(new BigInteger("65000549695646603727810655408050771481677621702948236658134783353303381437752"));
+    public static final BigInteger XI_PSquared_Minus1_Over3 = new BigInteger("65000549695646603727810655408050771481677621702948236658134783353303381437752");
+
+//    public static final GFp2 XI_PSquared_Minus1_Over2 = new GFp2(new GFp(BigInteger.ZERO), new GFp(new BigInteger("65000549695646603732796438742359905742825358107623003571877145026864184071782")));
 }
