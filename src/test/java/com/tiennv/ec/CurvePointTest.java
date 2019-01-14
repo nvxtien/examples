@@ -14,15 +14,15 @@ public class CurvePointTest {
 
         assertTrue(CurvePoint.GENERATOR.isOnCurve());
 
-        CurvePoint curvePoint = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n);
+        CurvePoint curvePoint = CurvePoint.GENERATOR.multiplyScalar(Fp256BN.n);
         curvePoint.print();
         assertTrue(curvePoint.isInfinity());
 
-        CurvePoint curvePoint1 = CurvePoint.GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
+        CurvePoint curvePoint1 = CurvePoint.GENERATOR.multiplyScalar(Fp256BN.n.subtract(BigInteger.ONE));
         curvePoint1.print();
         assertTrue(curvePoint1.isOnCurve());
 
-        CurvePoint curvePoint2 = CurvePoint.GENERATOR.scalarMultiply(BigInteger.ONE);
+        CurvePoint curvePoint2 = CurvePoint.GENERATOR.multiplyScalar(BigInteger.ONE);
         curvePoint2.print();
         assertTrue(curvePoint2.isOnCurve());
 
