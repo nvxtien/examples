@@ -27,8 +27,8 @@ import java.util.Objects;
 public class GFp2 {
 
 
-    public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
     public static final GFp2 ZERO = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ZERO));
+    public static final GFp2 ONE = new GFp2(new GFp(BigInteger.ZERO), new GFp(BigInteger.ONE));
     private static final BigInteger BETA = BigInteger.valueOf(-1);
 
     private GFp x, y; // xu + y

@@ -18,12 +18,12 @@ public class G1 {
     }
 
     public static G1 multiplyBaseScalar(BigInteger k) {
-        CurvePoint curve = GENERATOR.scalarMultiply(k);
+        CurvePoint curve = GENERATOR.multiplyScalar(k);
         return new G1(curve);
     }
 
     public static G1 multiplyScalar(final G1 g1,  BigInteger k) {
-        CurvePoint curve = g1.getCurvePoint().scalarMultiply(k);
+        CurvePoint curve = g1.getCurvePoint().multiplyScalar(k);
         return new G1(curve);
     }
 

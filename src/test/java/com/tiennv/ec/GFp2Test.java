@@ -208,6 +208,11 @@ public class GFp2Test {
         GFp2 XI_2PSquared_Minus1_Over6 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(6)));
         XI_2PSquared_Minus1_Over6.print();
 
+        // XI_PSquaredMinus1_Over2
+        // ξ^(p^2-1)/2
+        System.out.println("XI_PSquaredMinus1_Over2");
+        GFp2 XI_PSquaredMinus1_Over2 = gFp2.exp(Fp256BN.p.multiply(Fp256BN.p).subtract(BigInteger.valueOf(1)).divide(BigInteger.valueOf(2)));
+        XI_PSquaredMinus1_Over2.negate().print();
 
         GFp2 cọnjugateXi = new GFp2(new GFp(new BigInteger("-1")), new GFp(new BigInteger("3")));
         cọnjugateXi.print();

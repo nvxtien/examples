@@ -5,6 +5,9 @@ import java.util.Objects;
 
 import static com.tiennv.ec.Constants.*;
 
+/**
+ * E/Fp: Y^2 = X^3 + bZ^6
+ */
 public class CurvePoint {
 
     public static final CurvePoint POINT_INFINITY = new CurvePoint();
@@ -12,31 +15,20 @@ public class CurvePoint {
 
 
     private GFp x, y, z;
-//    private EllipticCurve curve;
-
-    // E/Fp: Y^2 = X^3 + aXZ^4 + bZ^6
 
     private CurvePoint() {
-//        this.curve = null;
         this.x = GFp.ZERO;
         this.y = GFp.ONE;
         this.z = GFp.ZERO;
     }
 
-    public CurvePoint(EllipticCurve curve, GFp x, GFp y, GFp z) {
-//        this.curve = curve;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
     public CurvePoint(GFp x, GFp y, GFp z) {
-//        this.curve = curve;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+/*
     public CurvePoint fromAffine(EllipticCurve curve, GFp ax, GFp ay) {
 //        this.curve = curve;
         this.x = ax;
@@ -44,6 +36,7 @@ public class CurvePoint {
         this.z = GFp.ONE;
         return this;
     }
+*/
 
     /*public void transformAffine() {
         if (this.isInfinity()) {
@@ -287,7 +280,7 @@ public class CurvePoint {
      * @param k
      * @return
      */
-    public CurvePoint scalarMultiply(BigInteger k) {
+    public CurvePoint multiplyScalar(BigInteger k) {
         CurvePoint r0 = CurvePoint.POINT_INFINITY;
         CurvePoint r1 = this;
 

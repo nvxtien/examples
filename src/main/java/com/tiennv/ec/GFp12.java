@@ -178,9 +178,9 @@ public class GFp12 {
      *
      * Require: A = a0 + a1w ∈ Fp12 .
      * Ensure: C = c0 + c1w = A^2 ∈ Fp12 .
-     * 1. c0 ← a0 − a1;
-     * 2. c3 ← a0 − γ · a1;
-     * 3. c2 ← a0 · a1;
+     * 1. c0 ← a0 − a1; a0
+     * 2. c3 ← a0 − γ · a1; a0
+     * 3. c2 ← a0 · a1; a0 * a0
      * 4. c0 ← c0 · c3 + c2;
      * 5. c1 ← 2c2;
      * 6. c2 ← γ · c2;
@@ -194,7 +194,7 @@ public class GFp12 {
         GFp6 c3 = this.getY().subtract(this.getX().multiplyGamma());
         GFp6 c2 = this.getY().multiply(this.getX());
 
-        c0 = c0.multiply(c3).add(c0);
+        c0 = c0.multiply(c3).add(c2);
         GFp6 c1 = c2.multiplyGFp(new GFp(BigInteger.valueOf(2)));
         c2 = c2.multiplyGamma();
         c0 = c0.add(c2);
@@ -208,5 +208,9 @@ public class GFp12 {
                 "x=" + x.toString() +
                 ", y=" + y.toString() +
                 '}';
+    }
+
+    public void print() {
+        System.out.println(toString());
     }
 }

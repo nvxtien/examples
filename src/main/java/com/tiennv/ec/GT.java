@@ -32,7 +32,7 @@ public class GT {
     @Override
     public String toString() {
         return "GT{" +
-                "gFp12=" + optimalAte.toString() +
+                 optimalAte.toString() +
                 '}';
     }
 

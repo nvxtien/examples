@@ -132,7 +132,7 @@ public class SchnorrSignatures {
         // Signature verification:
         // s*G = R + H(X,R,m) * X
 
-//        Point HX =  pub.scalarMultiply(H);
+//        Point HX =  pub.multiplyScalar(H);
 //        EFp eFp = new EFp();
 
         //R + H(X,R,m) * X

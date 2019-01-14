@@ -25,8 +25,8 @@ import static com.tiennv.ec.Constants.*;
  */
 public class GFp6 {
 
-    public static final GFp6 ONE = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
     public static final GFp6 ZERO = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ZERO);
+    public static final GFp6 ONE = new GFp6(GFp2.ZERO, GFp2.ZERO, GFp2.ONE);
 
     private final GFp2 x;
     private final GFp2 y;
