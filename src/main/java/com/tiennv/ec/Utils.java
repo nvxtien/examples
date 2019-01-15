@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +46,11 @@ public final class Utils {
 //        System.out.println(naf);
 
         return naf;
+    }
+
+    public static BigInteger generateKey(int numBits) {
+        SecureRandom random = new SecureRandom();
+        BigInteger k = new BigInteger(numBits, random);
+        return k;
     }
 }

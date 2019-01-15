@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static com.tiennv.ec.Constants.*;
-import static com.tiennv.ec.Fp256BN.gamma12;
-import static com.tiennv.ec.Fp256BN.gamma13;
 
 /**
  * https://eprint.iacr.org/2010/354.pdf
@@ -75,11 +73,6 @@ public class OptimalAtePairing {
         t1 = t6.multiplyScalar(xp.getValue()).multiplyScalar(BigInteger.valueOf(2));
 
         // 22
-//        GFp6 l0, l1;
-//        GFp2 a2 = ZERO;
-//        GFp2 a1 = ZERO;
-//        GFp2 a0 = t10;
-
         GFp2 zero = GFp2.ZERO;
 
         GFp6 l0 = new GFp6(zero, zero, t10);
@@ -87,15 +80,6 @@ public class OptimalAtePairing {
         GFp12 l = new GFp12(l1, l0);
 
         TwistPoint t = new TwistPoint(xt, yt, zt);
-
-//        t.setX(xt);
-//        t.setY(yt);
-//        t.setZ(zt);
-
-        System.out.println("lineFuncAdd");
-        System.out.println(t9);
-        System.out.println(t1);
-        System.out.println(t10);
 
         return new LineFuncReturn(t, l);
     }
@@ -143,15 +127,6 @@ public class OptimalAtePairing {
         GFp12 l = new GFp12(l1, l0);
 
         TwistPoint t = new TwistPoint(xt, yt, zt);
-//        t.setX(xt);
-//        t.setY(yt);
-//        t.setZ(zt);
-
-        System.out.println("lineFuncDouble:");
-        System.out.println(t6);
-        System.out.println(t3);
-        System.out.println(t0);
-//        System.out.println(t.toString());
 
         return new LineFuncReturn(t, l);
     }
@@ -177,19 +152,8 @@ public class OptimalAtePairing {
      */
     public GFp12 mulLine(GFp12 f, GFp12 line) {
 
-//        System.out.println("a1 " + f.getX());
-//        System.out.println("a0 " + f.getY());
-
-//        System.out.println("b0 " + line.getY());
-
-
         GFp6 t0 = f.getY().multiplyScalar(line.getY().getZ());
-//        System.out.println("a0 * b0: " + t0);
-
         GFp6 t1 = f.getX().multiply(line.getX());
-//        System.out.println("a1 * b1: " + t1);
-
-//        System.out.println("a0 * b0: " + t0);
 
         GFp6 c0 = t0.add(t1.multiplyGamma());
 
@@ -203,90 +167,9 @@ public class OptimalAtePairing {
         GFp6 c1 = f.getY().add(f.getX()).multiply(t2);
         c1 = c1.subtract(t0).subtract(t1);
 
-        System.out.println("mulLine:");
-        System.out.println(c1);
-        System.out.println(c0);
-
         return new GFp12(c1, c0);
     }
 
-    /*public GFp12 mulLine(GFp12 f, GFp12 line) {
-
-
-//        a2 := newGFp6(pool)
-//        a2.x.SetZero()
-//        a2.y.Set(a)
-//        a2.z.Set(b)
-//        a2.Mul(a2, ret.x, pool)
-
-        GFp2 a = line.getX().getY();
-        GFp2 b = line.getX().getZ();
-
-        GFp2 c = line.getY().getZ();
-        System.out.println("a: " + a);
-        System.out.println("b: " + b);
-        System.out.println("c: " + c);
-
-        System.out.println("ret.x: " + f.getX());
-
-        GFp6 a2 = line.getX().multiply(f.getX());
-        System.out.println("a2: " + a2);
-
-
-//        t3 := newGFp6(pool).MulScalar(ret.y, c, pool)
-        GFp6 t3 = f.getY().multiplyScalar(c);//f.getY().multiply(line.getY());
-        System.out.println("t3: " + t3);
-
-
-//
-//        t := newGFp2(pool)
-//        t.Add(b, c)
-
-        GFp2 t = b.add(c) ;//line.getX().getY().add(line.getY().getZ());
-
-//        t2 := newGFp6(pool)
-//        t2.x.SetZero()
-//        t2.y.Set(a)
-//        t2.z.Set(t)
-
-        GFp6 t2 = new GFp6(GFp2.ZERO, a, t);
-
-//        ret.x.Add(ret.x, ret.y)
-
-        GFp6 x = f.getX().add(f.getY()); // ret.x
-
-//
-//        ret.y.Set(t3)
-//
-        GFp6 y = t3; // ret.y
-
-//        ret.x.Mul(ret.x, t2, pool)
-//        ret.x.Sub(ret.x, a2)
-//        ret.x.Sub(ret.x, ret.y)
-
-        x = x.multiply(t2);
-        x = x.subtract(a2);
-        x = x.subtract(y);
-
-//        a2.MulTau(a2, pool)
-
-            a2 = a2.multiplyGamma();
-
-//        ret.y.Add(ret.y, a2)
-
-        y = y.add(a2);
-//
-
-        //        GFp12 multiply = f.multiply(line);
-
-        GFp12 multiply = new GFp12(x, y);
-        System.out.println("mulLine:");
-        System.out.println(multiply.getX());
-        System.out.println(multiply.getY());
-
-        return multiply;
-    }
-*/
     /**
      * Algorithm 1 Optimal ate pairing over Barreto–Naehrig curves.
      *
@@ -308,12 +191,9 @@ public class OptimalAtePairing {
         LineFuncReturn ret;
         for (int i = NAF.size()-2; i>=0; i--) {
             f = f.square(); // 4. f ← f^2 · l_(T ,T) (P); T ← 2T;
-            f.print();
             ret = lineFuncDouble(t, p); // l_(T ,T) (P)
             t = ret.getT(); // 2T
             f = mulLine(f, ret.getLine());
-
-//            break;
 
             if (NAF.get(i).equals(BigInteger.valueOf(-1))) {
                 ret = lineFuncAdd(t, minusQ, p); // 6. f ← f · l_(T ,−Q)(P); T ← T − Q;
@@ -326,33 +206,24 @@ public class OptimalAtePairing {
             }
         }
 
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++");
         // 11. Q1 ← πp(Q); Q2 ← πp2 (Q);
-
-//        System.out.println("q: " + q.toString());
-        EllipticCurve twist;
 
         // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
         //                  = x^p.ω^2.ξ^(p-1)/3
-        GFp2 x = q.getX().conjugate().multiply(gamma12);
-//        GFp2 x = q.getX().conjugate().multiply(XI_P_Minus1_Over3);
+//        GFp2 x = q.getX().conjugate().multiply(gamma12);
+         GFp2 x = q.getX().conjugate().multiply(XI_P_Minus1_Over3);
 
 
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ω^(3p-3)
         // ξ^6 = ω
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ξ^(p-1)/2
-        GFp2 y = q.getY().conjugate().multiply(gamma13);
-//        GFp2 y = q.getY().conjugate().multiply(XI_PMinus1_Over2);
+//        GFp2 y = q.getY().conjugate().multiply(gamma13);
+         GFp2 y = q.getY().conjugate().multiply(XI_P_Minus1_Over2);
 
         GFp2 z = ONE;
         TwistPoint q1 = new TwistPoint(x, y, z);
-        System.out.println("q1");
-        q1.print();
-
-//        System.out.println("q1: " + q1.toString());
-
         // (xω^2)^p^2=x^p^2.ω^2p^2=x^p^2.ω^2.ω^(2p^2-2)
         // ξ^6 = ω
         // (xω^2)^p^2=x^p^2.ω^2p^2=x^p^2.ω^2.ω^(2p^2-2)
@@ -370,21 +241,13 @@ public class OptimalAtePairing {
         GFp2 z2 = ONE;
 
         TwistPoint minusQ2 = new TwistPoint(x2, y2, z2);
-        System.out.println("minusQ2");
-        minusQ2.print();
-//        System.out.println("minusQ2: " + minusQ2.toString());
 
         ret = lineFuncAdd(t, q1, p); // 12. f ← f · l_(T ,Q1)(P); T ← T + Q1;
         t = ret.getT();
         f = mulLine(f, ret.getLine());
         ret = lineFuncAdd(t, minusQ2, p); // 13. f ← f · l_(T ,−Q2)(P); T ← T − Q2;
 
-//        ret.getLine().print();
-//        ret.getT().print();
-
         f = mulLine(f, ret.getLine());
-
-//        f.print();
 
         return f;
     }
@@ -406,7 +269,6 @@ public class OptimalAtePairing {
 
         // 3) f ← f1 · f2
         f = f1.multiply(f2);
-        System.out.println("¯f * f^-1" + f);
 
         // 4) f ← frobeniusP2(f) · f;
         f = f.frobeniusP2().multiply(f);
@@ -471,7 +333,6 @@ public class OptimalAtePairing {
 
     public GFp12 optimalAte(TwistPoint a, CurvePoint b) {
         GFp12 e = miller(a, b);
-        System.out.println("miller: " + e.toString());
         GFp12 ret = finalExponentiation(e);
 
         if (a.isInfinity() || b.isInfinity()) {

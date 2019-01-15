@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 import static com.tiennv.ec.Constants.*;
 
@@ -265,6 +266,21 @@ public class GFp6 {
     public GFp6 multiplyGFp(GFp k) {
         BigInteger b = k.getValue();
         return new GFp6(this.getX().multiplyScalar(b), this.getY().multiplyScalar(b), this.getZ().multiplyScalar(b));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GFp6 gFp6 = (GFp6) o;
+        return x.equals(gFp6.x) &&
+                y.equals(gFp6.y) &&
+                z.equals(gFp6.z);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 
     @Override

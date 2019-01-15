@@ -4,9 +4,8 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 
-import static com.tiennv.ec.Constants.XI;
-import static com.tiennv.ec.Fp256BN.gamma12;
-import static com.tiennv.ec.Fp256BN.gamma13;
+import static com.tiennv.ec.Constants.*;
+import static com.tiennv.ec.Constants.XI_P_Minus1_Over2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -25,8 +24,8 @@ public class TwistPointTest {
         GFp2 bXIminusOne = XI.inverse().multiplyScalar(BigInteger.valueOf(3));
         bXIminusOne.print();
 
-        x = x.conjugate().multiply(gamma12);
-        y = y.conjugate().multiply(gamma13);
+        x = x.conjugate().multiply(XI_P_Minus1_Over3);
+        y = y.conjugate().multiply(XI_P_Minus1_Over2);
         z = GFp2.ONE;
 
         TwistPoint q1 = new TwistPoint(x, y, z);
@@ -48,6 +47,5 @@ public class TwistPointTest {
         assertEquals(a1, a2.negate());
         a1.print();
         a2.negate().print();
-
     }
 }

@@ -1,6 +1,7 @@
 package com.tiennv.ec;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Multiplicative group
@@ -31,9 +32,20 @@ public class GT {
 
     @Override
     public String toString() {
-        return "GT{" +
-                 optimalAte.toString() +
-                '}';
+        return optimalAte.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GT gt = (GT) o;
+        return optimalAte.equals(gt.optimalAte);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(optimalAte);
     }
 
     public void print() {

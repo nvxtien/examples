@@ -2,6 +2,7 @@ package com.tiennv.ec;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 import static com.tiennv.ec.Constants.XI_2PSquared_Minus1_Over6;
 import static com.tiennv.ec.Constants.XI_P_Minus1_Over6;
@@ -200,6 +201,20 @@ public class GFp12 {
         c0 = c0.add(c2);
 
         return new GFp12(c1, c0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GFp12 gFp12 = (GFp12) o;
+        return x.equals(gFp12.x) &&
+                y.equals(gFp12.y);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     @Override
