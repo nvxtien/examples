@@ -67,7 +67,7 @@ public class GFp6 {
         GFp2 b2 = b.getX();
 
         GFp2 v0 = a0.multiply(b0);
-        GFp2 v1 = a1.multiply(a1);
+        GFp2 v1 = a1.multiply(b1);
         GFp2 v2 = a2.multiply(b2);
 
         // c0 = v0 + ξ((a1 + a2)(b1 + b2) − v1 − v2)
