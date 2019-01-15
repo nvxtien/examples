@@ -1,1 +1,2 @@
 # java-elliptic-curve
+We construct $\mathbb{F}_{p^2} = \mathbb{F}_p[X]/(X^2-\beta)$ and $\mathbb{F}_{p^6} = \mathbb{F}_{p^2} [Y]/(Y^3-\xi)$, where $\beta$ is a quadratic non-residue in $\mathbb{F}_p$ and $\xi = \sqrt{\beta}$ is a cubic non-residue in $\mathbb{F}_{p^2}$. An element $\alpha \in \mathbb{F}_{p^6}$ is represented as $\alpha_0 + \alpha_1Y + \alpha_2Y^2$, where $\alpha_i \in \mathbb{F}_{p^2}$. 
