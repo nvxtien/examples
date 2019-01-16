@@ -106,7 +106,7 @@ The equation of the curve is
 <img src="https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " />
 
 Inline-style: 
-![alt text](https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " abc ")
+![alt text](https://latex.codecogs.com/gif.latex?y^2%20=%20x^3%20+%20b " abc ")
 
 Inline-style: 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
