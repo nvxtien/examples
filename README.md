@@ -94,3 +94,4 @@ A --> C(Round Rect)
 B --> D{Rhombus}
 C --> D
 ```
+katex.render("% \\f is defined as f(#1) using the macro\n\\f{x} = \\int_{-\\infty}^\\infty\n    \\hat \\f\\xi\\,e^{2 \\pi i \\xi x}\n    \\,d\\xi", /* element */, {"displayMode":true,"throwOnError":true,"errorColor":"#cc0000","strict":"warn","macros":{"\\f":"f(#1)"}})
