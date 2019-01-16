@@ -107,7 +107,7 @@ The equation of the curve is
 
 Inline-style: 
 ![alt text](https://latex.codecogs.com/gif.latex?y^2%20=%20x^3%20+%20b " abc ")
-[](https://latex.codecogs.com/gif.latex?\mathbb{E}_u:%20y^2%20=%20x^3%20+%20b)
+![dfgfgfd](https://latex.codecogs.com/gif.latex?\mathbb{E}_u:%20y^2%20=%20x^3%20+%20b "dsfsdfdfdf")
 Inline-style: 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 
