@@ -104,6 +104,13 @@ This is an experimental implementation of the Ate optimal pairing in Java. It ha
 A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12. \\ 
 The equation of the curve is
 <img src="https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " />
+
+Inline-style: 
+![alt text](https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " abc ")
+
+Inline-style: 
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
 E<sub>u</sub>: y^2 = x^3 + b\]
 \quad The curve order and the characteristic of $\mathbb{F}_p$ are parameterised as:
 \[p(u) = 36u^4 + 36u^3 + 24u^2 + 6u + 1\]
