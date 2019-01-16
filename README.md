@@ -94,4 +94,22 @@ A --> C(Round Rect)
 B --> D{Rhombus}
 C --> D
 ```
-katex.render("% \\f is defined as f(#1) using the macro\n\\f{x} = \\int_{-\\infty}^\\infty\n    \\hat \\f\\xi\\,e^{2 \\pi i \\xi x}\n    \\,d\\xi", /* element */, {"displayMode":true,"throwOnError":true,"errorColor":"#cc0000","strict":"warn","macros":{"\\f":"f(#1)"}})
+
+h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
+
+## Introduction
+This is an experimental implementation of the Ate optimal pairing in Java. It has never been used in production. Use it at your risk.
+
+## Barreto - Naehrig curve 
+A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12. \\ 
+The equation of the curve is
+<img src="https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " />
+E<sub>u</sub>: y^2 = x^3 + b\]
+\quad The curve order and the characteristic of $\mathbb{F}_p$ are parameterised as:
+\[p(u) = 36u^4 + 36u^3 + 24u^2 + 6u + 1\]
+\[n(u) = 36u^4 + 36u^3 + 18u^2 + 6u + 1\]
+\quad Hence the trace (of Frobenius) of the curve
+\[t(u) = 6u^2 + 1\]
+\quad Finding b is actually very simple: take the smallest $b \neq 0$ such that $b + 1$ is a
+quadratic residue modp and the point $G = (1,\sqrt[2]{b + 1}$ mod $p)$, which is clearly
+on the curve. 
