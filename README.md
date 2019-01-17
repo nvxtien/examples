@@ -23,7 +23,7 @@ Hence the trace (of Frobenius) of the curve
 ![][tu]
 
 Finding b is actually very simple: take the smallest b &ne; 0 such that b + 1 is a quadratic residue modp and the point
- ![](https://latex.codecogs.com/gif.latex?$G%20=%20(1,\sqrt[2]{b%20+%201}$%20mod%20$p)$), which is clearly on the curve.
+ ![](https://latex.codecogs.com/gif.latex?$G%20=%20(1,\sqrt[2]{b%20+%201}$%20\quad%20mod%20\quad%20$p)$), which is clearly on the curve.
  [3] 
 
 
