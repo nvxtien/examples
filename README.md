@@ -10,7 +10,7 @@ A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with pr
 
 The equation of the curve is 
 
-![](https://latex.codecogs.com/gif.latex?E_{u}:%20y^2%20=%20x^3%20+%20b%20\quad%20with%20\quad%20b%20\neq%200)
+      ![](https://latex.codecogs.com/gif.latex?E_{u}:%20y^2%20=%20x^3%20+%20b%20\quad%20with%20\quad%20b%20\neq%200)
 
 
 E<sub>u</sub>: y^2 = x^3 + b\]
