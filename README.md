@@ -9,7 +9,7 @@
 A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12. \\ 
 The equation of the curve is
 
-[](https://latex.codecogs.com/gif.latex?y^2%20=%20x^3%20+%20b " abc ")
+![](https://latex.codecogs.com/gif.latex?y^2%20=%20x^3%20+%20b " abc ")
 
 Inline-style: 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
