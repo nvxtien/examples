@@ -8,10 +8,10 @@
 ## Barreto - Naehrig curves 
 A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12.
 
-The equation of the curve is ![](https://latex.codecogs.com/gif.latex?E_u:%20y^2%20=%20x^3%20+%20b)
+The equation of the curve is 
 
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![](https://latex.codecogs.com/gif.latex?E_{u}:%20y^2%20=%20x^3%20+%20b%20\quad%20with%20\quad%20b%20\neq%200)
+
 
 E<sub>u</sub>: y^2 = x^3 + b\]
 \quad The curve order and the characteristic of $\mathbb{F}_p$ are parameterised as:
