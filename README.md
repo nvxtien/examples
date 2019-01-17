@@ -1,6 +1,6 @@
 # Pairing-based-cryptography
 
-> **Note:** This is an experimental implementation of the Ate optimal pairing in Java. It has never been used in production. Use it at your risk.
+> **Note:** This is an experimental implementation of optimal Ate pairing in Java. It has never been used in production. Use it at your risk.
 
 ## Introduction
 
