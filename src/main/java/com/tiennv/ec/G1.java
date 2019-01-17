@@ -13,8 +13,12 @@ public class G1 {
 
     private CurvePoint curvePoint;
 
-    public G1(final CurvePoint p) {
+    private G1(final CurvePoint p) {
         this.curvePoint = p;
+    }
+
+    public static G1 newG1(final CurvePoint p) {
+        return new G1(p);
     }
 
     public static G1 multiplyBaseScalar(BigInteger k) {

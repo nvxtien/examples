@@ -44,14 +44,14 @@ public class CurvePoint {
         }
         GFp invz = this.z.inverse();
         GFp invz2 = invz.square();
-        GFp invz3 = invz.multiply(invz2);
+        GFp invz3 = invz.multiplyScalar(invz2);
 
-        this.x = this.x.multiply(invz2);
-        this.y = this.y.multiply(invz3);
+        this.x = this.x.multiplyScalar(invz2);
+        this.y = this.y.multiplyScalar(invz3);
         this.z = GFp.ONE;
 
 
-//        return Point.newPoint(curve, this.x.multiply(invz2).getValue(), this.y.multiply(invz3).getValue());
+//        return Point.newPoint(curve, this.x.multiplyScalar(invz2).getValue(), this.y.multiplyScalar(invz3).getValue());
     }*/
 
     public CurvePoint negate() {
@@ -169,13 +169,13 @@ public class CurvePoint {
         BigInteger b = this.y.pow(2);
         BigInteger c = b.pow(2);
 
-        BigInteger d = TWO.multiply((this.x.add(b)).pow(2).subtract(a).subtract(c));
-        BigInteger e = THREE.multiply(a);
+        BigInteger d = TWO.multiplyScalar((this.x.add(b)).pow(2).subtract(a).subtract(c));
+        BigInteger e = THREE.multiplyScalar(a);
         BigInteger f = e.pow(2);
 
-        BigInteger X3 = f.subtract(TWO.multiply(d));
-        BigInteger Y3 = (e.multiply(d.subtract(X3))).subtract(EIGHT.multiply(c));
-        BigInteger Z3 = TWO.multiply(this.y).multiply(this.z);
+        BigInteger X3 = f.subtract(TWO.multiplyScalar(d));
+        BigInteger Y3 = (e.multiplyScalar(d.subtract(X3))).subtract(EIGHT.multiplyScalar(c));
+        BigInteger Z3 = TWO.multiplyScalar(this.y).multiplyScalar(this.z);
 
         System.out.println(this.x);*/
 
@@ -231,22 +231,22 @@ public class CurvePoint {
         BigInteger a = this.x.pow(2);
         BigInteger b = this.y.pow(2);
 
-        BigInteger S = FOUR.multiply(this.x).multiply(b).mod(p);
+        BigInteger S = FOUR.multiplyScalar(this.x).multiplyScalar(b).mod(p);
 
 
-        BigInteger M = THREE.multiply(a).add(this.curve.getA().multiply(this.z.pow(4))).mod(p);
-        BigInteger T = TWO.negate().multiply(S).add(M.pow(2)).mod(p);
+        BigInteger M = THREE.multiplyScalar(a).add(this.curve.getA().multiplyScalar(this.z.pow(4))).mod(p);
+        BigInteger T = TWO.negate().multiplyScalar(S).add(M.pow(2)).mod(p);
 
 
         BigInteger x3 = T;
         System.out.println("x3: " + x3);
 
 
-        BigInteger y3 = M.multiply(S.subtract(T)).subtract(EIGHT.multiply(b.pow(2))).mod(p);
+        BigInteger y3 = M.multiplyScalar(S.subtract(T)).subtract(EIGHT.multiplyScalar(b.pow(2))).mod(p);
         System.out.println("y3: " + y3);
 
 
-        BigInteger z3 = TWO.multiply(this.y).multiply(this.z).mod(p);
+        BigInteger z3 = TWO.multiplyScalar(this.y).multiplyScalar(this.z).mod(p);
         System.out.println("z3: " + z3);*/
         GFp y1 = this.y;
         GFp z1 = this.z;
