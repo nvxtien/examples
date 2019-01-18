@@ -1,9 +1,8 @@
 # Pairing-based-cryptography
 
-## Introduction
 This is an experimental implementation of the Ate optimal pairing in Java. It has never been used in production. Use it at your risk.
 
-## Barreto - Naehrig curve 
+## Barreto - Naehrig curves 
 A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12. \\ 
 The equation of the curve is
 <img src="https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " />
