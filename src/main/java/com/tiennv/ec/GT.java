@@ -5,8 +5,8 @@ import java.util.Objects;
 
 /**
  * Multiplicative group
- * multiply -> exp
- * add -> multiply
+ * multiplyScalar -> exp
+ * add -> multiplyScalar
  * negate -> inverse
  */
 public class GT {
@@ -15,11 +15,6 @@ public class GT {
 
     public GT(final GFp12 optimalAte) {
         this.optimalAte = optimalAte;
-    }
-
-    public static GT pair(final G1 g1, final G2 g2) {
-        OptimalAtePairing pairing = new OptimalAtePairing();
-        return new GT(pairing.optimalAte(g2.getTwistPoint(), g1.getCurvePoint()));
     }
 
     public GT multiplyScalar(BigInteger k) {

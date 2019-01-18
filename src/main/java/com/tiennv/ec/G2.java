@@ -8,21 +8,25 @@ public class G2 {
 
     private TwistPoint twistPoint;
 
-    public G2(final TwistPoint p) {
-        this.twistPoint = p;
+    private G2(final TwistPoint p) {
+        twistPoint = p;
+    }
+
+    public static G2 newG2(final TwistPoint p) {
+        return new G2(p);
     }
 
     public static G2 multiplyBaseScalar(BigInteger k) {
-        TwistPoint curve = GENERATOR.scalarMultiply(k);
+        TwistPoint curve = GENERATOR.multiplyScalar(k);
         return new G2(curve);
     }
 
-    public G2 add(final G2 a, final G2 b) {
+    public static G2 add(final G2 a, final G2 b) {
         return new G2(a.getTwistPoint().add(b.getTwistPoint()));
     }
 
-    public G2 multiply(final BigInteger k) {
-        return new G2(this.twistPoint.scalarMultiply(k));
+    public static G2 multiplyScalar(final G2 g2, final BigInteger k) {
+        return new G2(g2.getTwistPoint().multiplyScalar(k));
     }
 
     public TwistPoint getTwistPoint() {

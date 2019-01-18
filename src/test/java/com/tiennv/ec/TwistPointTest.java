@@ -32,16 +32,16 @@ public class TwistPointTest {
         q1.print();
         assertTrue(q1.isOnCurve());
 
-        TwistPoint q2 = q1.scalarMultiply(Fp256BN.n);
+        TwistPoint q2 = q1.multiplyScalar(Fp256BN.n);
         assertTrue(q2.isInfinity());
         q2.print();
 
-        TwistPoint a = TwistPoint.GENERATOR.scalarMultiply(Fp256BN.n);
+        TwistPoint a = TwistPoint.GENERATOR.multiplyScalar(Fp256BN.n);
         assertTrue(a.isInfinity());
 
 
-        TwistPoint a1 = TwistPoint.GENERATOR.scalarMultiply(Fp256BN.n.subtract(BigInteger.ONE));
-        TwistPoint a2 = TwistPoint.GENERATOR.scalarMultiply(BigInteger.ONE);
+        TwistPoint a1 = TwistPoint.GENERATOR.multiplyScalar(Fp256BN.n.subtract(BigInteger.ONE));
+        TwistPoint a2 = TwistPoint.GENERATOR.multiplyScalar(BigInteger.ONE);
         TwistPoint a3 = a1.add(a2);
         assertTrue(a3.isInfinity());
         assertEquals(a1, a2.negate());

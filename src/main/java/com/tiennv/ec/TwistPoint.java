@@ -143,13 +143,13 @@ public class TwistPoint {
         BigInteger b = this.y.pow(2);
         BigInteger c = b.pow(2);
 
-        BigInteger d = TWO.multiply((this.x.add(b)).pow(2).subtract(a).subtract(c));
-        BigInteger e = THREE.multiply(a);
+        BigInteger d = TWO.multiplyScalar((this.x.add(b)).pow(2).subtract(a).subtract(c));
+        BigInteger e = THREE.multiplyScalar(a);
         BigInteger f = e.pow(2);
 
-        BigInteger X3 = f.subtract(TWO.multiply(d));
-        BigInteger Y3 = (e.multiply(d.subtract(X3))).subtract(EIGHT.multiply(c));
-        BigInteger Z3 = TWO.multiply(this.y).multiply(this.z);
+        BigInteger X3 = f.subtract(TWO.multiplyScalar(d));
+        BigInteger Y3 = (e.multiplyScalar(d.subtract(X3))).subtract(EIGHT.multiplyScalar(c));
+        BigInteger Z3 = TWO.multiplyScalar(this.y).multiplyScalar(this.z);
 
         System.out.println(this.x);*//*
 
@@ -161,17 +161,17 @@ public class TwistPoint {
         BigInteger t1 = t0.pow(2);// t0^2
         BigInteger t2 = t1.subtract(A);// t1-A
         BigInteger t3 = t2.subtract(C);// t2-C
-        BigInteger D = TWO.multiply(t3);//2*t3
-        BigInteger E = THREE.multiply(A);//3*A
+        BigInteger D = TWO.multiplyScalar(t3);//2*t3
+        BigInteger E = THREE.multiplyScalar(A);//3*A
         BigInteger F = E.pow(2);//E^2
-        BigInteger t4 = TWO.multiply(D);//2*D
+        BigInteger t4 = TWO.multiplyScalar(D);//2*D
         BigInteger X3 = F.subtract(t4);// F-t4
         BigInteger t5 = D.subtract(X3);// D-X3
-        BigInteger t6 = EIGHT.multiply(C);// 8*C
-        BigInteger t7 = E.multiply(t5);// E*t5
+        BigInteger t6 = EIGHT.multiplyScalar(C);// 8*C
+        BigInteger t7 = E.multiplyScalar(t5);// E*t5
         BigInteger Y3 = t7.subtract(t6);// t7-t6
-        BigInteger t8 = this.y.multiply(this.z);// Y1*Z1
-        BigInteger Z3 = TWO.multiply(t8);// 2*t8
+        BigInteger t8 = this.y.multiplyScalar(this.z);// Y1*Z1
+        BigInteger Z3 = TWO.multiplyScalar(t8);// 2*t8
 
         BigInteger x = X3.mod(p);
         BigInteger y = Y3.mod(p);
@@ -221,7 +221,7 @@ public class TwistPoint {
      * @param k
      * @return
      */
-    public TwistPoint scalarMultiply(BigInteger k) {
+    public TwistPoint multiplyScalar(BigInteger k) {
         TwistPoint r0 = TwistPoint.POINT_INFINITY;
         TwistPoint r1 = this;
         int n = k.bitLength();

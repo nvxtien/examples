@@ -13,30 +13,30 @@ public class TripartiteDHTest {
 
     @Test
     public void gt1Test() {
-        G1 g1 = new G1(CurvePoint.GENERATOR);
+        G1 g1 = G1.newG1(CurvePoint.GENERATOR);
 //        assertEquals(g1.multiplyBaseScalar(Fp256BN.n).getCurvePoint(), CurvePoint.POINT_INFINITY);
 
-        G2 g2 = new G2(TwistPoint.GENERATOR);
+        G2 g2 = G2.newG2(TwistPoint.GENERATOR);
 //        assertEquals(g2.multiplyBaseScalar(Fp256BN.n).getTwistPoint(), TwistPoint.POINT_INFINITY);
 
-        GT test = GT.pair(g1, g2);
+        GT test = Pairings.pair(g1, g2);
         test = test.multiplyScalar(Fp256BN.n);
         test.print();
     }
 
     @Test
     public void gtOrderTest() {
-        G1 g1 = new G1(CurvePoint.GENERATOR);
+        G1 g1 = G1.newG1(CurvePoint.GENERATOR);
         g1.multiplyBaseScalar(Fp256BN.n).print();
         assertEquals(g1.multiplyBaseScalar(Fp256BN.n).getCurvePoint(), CurvePoint.POINT_INFINITY);
         g1.print();
 
-        G2 g2 = new G2(TwistPoint.GENERATOR);
+        G2 g2 = G2.newG2(TwistPoint.GENERATOR);
         g1.multiplyBaseScalar(Fp256BN.n).print();
         assertEquals(g2.multiplyBaseScalar(Fp256BN.n).getTwistPoint(), TwistPoint.POINT_INFINITY);
 //        g1.print();
 
-        GT test = GT.pair(g1, g2);
+        GT test = Pairings.pair(g1, g2);
         test = test.multiplyScalar(Fp256BN.n);
         test.print();
     }
@@ -63,15 +63,15 @@ public class TripartiteDHTest {
         G2 g2_c = G2.multiplyBaseScalar(c);
 //        g2_c.print();
 
-        GT gt_a = GT.pair(g1_b, g2_c);
+        GT gt_a = Pairings.pair(g1_b, g2_c);
         gt_a = gt_a.multiplyScalar(a);
         gt_a.print();
 
-        GT gt_b = GT.pair(g1_c, g2_a);
+        GT gt_b = Pairings.pair(g1_c, g2_a);
         gt_b = gt_b.multiplyScalar(b);
         gt_b.print();
 
-        GT gt_c = GT.pair(g1_a, g2_b);
+        GT gt_c = Pairings.pair(g1_a, g2_b);
         gt_c = gt_c.multiplyScalar(c);
         gt_c.print();
 

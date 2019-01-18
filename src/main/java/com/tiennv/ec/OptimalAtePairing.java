@@ -212,14 +212,14 @@ public class OptimalAtePairing {
         // ξ^6 = ω
         // (xω^2)^p=x^p.ω^2p=x^p.ω^2.ω^(2p-2)
         //                  = x^p.ω^2.ξ^(p-1)/3
-//        GFp2 x = q.getX().conjugate().multiply(gamma12);
+//        GFp2 x = q.getX().conjugate().multiplyScalar(gamma12);
          GFp2 x = q.getX().conjugate().multiply(XI_P_Minus1_Over3);
 
 
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ω^(3p-3)
         // ξ^6 = ω
         // (yω^3)^p=y^p.ω^3p=y^p.ω^3.ξ^(p-1)/2
-//        GFp2 y = q.getY().conjugate().multiply(gamma13);
+//        GFp2 y = q.getY().conjugate().multiplyScalar(gamma13);
          GFp2 y = q.getY().conjugate().multiply(XI_P_Minus1_Over2);
 
         GFp2 z = ONE;
@@ -234,7 +234,7 @@ public class OptimalAtePairing {
         // (yω^3)^p^2=y^p^2.ω^3p^2=y.ω^3.ω^(3p^2-3)
         // ξ^6 = ω
         // (yω^3)^p=y^p^2.ω^3p^2=y.ω^3.ξ^(p^2-1)/2
-        // y = q.getY().multiply(XI_PSquaredMinus1_Over2).negate();
+        // y = q.getY().multiplyScalar(XI_PSquaredMinus1_Over2).negate();
         // equals y, so we can ignore compute y, just reuse it
         GFp2 y2 = q.getY();
 
@@ -332,12 +332,20 @@ public class OptimalAtePairing {
     }
 
     public GFp12 optimalAte(TwistPoint a, CurvePoint b) {
+        /*if (a.isInfinity() || b.isInfinity()) {
+            return GFp12.ONE;
+        }*/
+
         GFp12 e = miller(a, b);
+        if (e.equals(GFp12.ZERO)) {
+            return GFp12.ONE;
+        }
+
         GFp12 ret = finalExponentiation(e);
 
-        if (a.isInfinity() || b.isInfinity()) {
-            ret = GFp12.ONE;
-        }
+        /*if (a.isInfinity() || b.isInfinity()) {
+            return GFp12.ONE;
+        }*/
 
         return ret;
     }
