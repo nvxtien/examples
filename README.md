@@ -17,7 +17,7 @@ the multiplicative group of a finite field, ![][g1], ![][g2] and ![][gt] have or
 and ![](https://latex.codecogs.com/gif.latex?$R%20\in%20\mathbb{G}_2$). 
 Or, equivalently, ![](https://latex.codecogs.com/gif.latex?$e(P,%20R)%20=%201$) for all ![](https://latex.codecogs.com/gif.latex?$R%20\in%20\mathbb{G}_2$) 
 if and only if ![](https://latex.codecogs.com/gif.latex?$P%20=%20\mathcal{O}$); and ![](https://latex.codecogs.com/gif.latex?$e(P,%20R)%20=%201$) 
-for all ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$) if and only if ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$)
+for all ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$) if and only if ![](https://latex.codecogs.com/gif.latex?$R%20=%20\mathcal{O}$)
 
 Also, it immediately follows that ![](https://latex.codecogs.com/gif.latex?$e(aP,%20bR)=e(P,%20R)^{ab}=e(bP,%20aR)$) for any two integers a and b.
 
