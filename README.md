@@ -13,9 +13,13 @@ the multiplicative group of a finite field, ![][g1], ![][g2] and ![][gt] have or
 • Bilinearity: for ![](https://latex.codecogs.com/gif.latex?$P,%20Q%20\in%20\mathbb{G}_1$) and ![](https://latex.codecogs.com/gif.latex?$R,%20S%20\in%20\mathbb{G}_2$), 
 ![](https://latex.codecogs.com/gif.latex?$e(P%20+%20Q,%20R)%20=%20e(P,%20R).e(Q,%20R)$) and ![](https://latex.codecogs.com/gif.latex?$e(P,R%20+%20S)%20=%20e(P,R).e(P,S)$)
 
-• Non-degeneracy: $e(P, R) \neq 1$ for some $P \in \mathbb{G}_1$ and $R \in \mathbb{G}_2$. Or, equivalently, $e(P, R) = 1$ for all $R \in \mathbb{G}_2$ if and only if $P = \mathcal{O}$; and $e(P, R) = 1$ for all $P \in \mathbb{G}_1$ if and only if $R = \mathcal{O}$.\\
+• Non-degeneracy: ![](https://latex.codecogs.com/gif.latex?$e(P,%20R)%20\neq%201$) for some ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$) 
+and ![](https://latex.codecogs.com/gif.latex?$R%20\in%20\mathbb{G}_2$). 
+Or, equivalently, ![](https://latex.codecogs.com/gif.latex?$e(P,%20R)%20=%201$) for all ![](https://latex.codecogs.com/gif.latex?$R%20\in%20\mathbb{G}_2$) 
+if and only if ![](https://latex.codecogs.com/gif.latex?$P%20=%20\mathcal{O}$); and ![](https://latex.codecogs.com/gif.latex?$e(P,%20R)%20=%201$) 
+for all ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$) if and only if ![](https://latex.codecogs.com/gif.latex?$P%20\in%20\mathbb{G}_1$)
 
-Also, it immediately follows that $e(aP, bR)=e(P, R)^{ab}=e(bP, aR)$ for any two integers a and b.
+Also, it immediately follows that ![](https://latex.codecogs.com/gif.latex?$e(aP,%20bR)=e(P,%20R)^{ab}=e(bP,%20aR)$) for any two integers a and b.
 
 ## Barreto - Naehrig curves 
 A BN curve is an elliptic curve over a finite prime field ![][Fp], with prime order n and  embedding degree k = 12.
