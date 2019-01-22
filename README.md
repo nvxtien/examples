@@ -1,25 +1,52 @@
 # Pairing-based-cryptography
 
+> **Note:** This is an experimental implementation of optimal Ate pairing in Java. It has never been used in production. Use it at your risk.
+
 ## Introduction
-This is an experimental implementation of the Ate optimal pairing in Java. It has never been used in production. Use it at your risk.
 
-## Barreto - Naehrig curve 
-A BN curve is an elliptic curve over a finite prime field F<sub>p</sub>, with prime order n and  embedding degree k = 12. \\ 
-The equation of the curve is
-<img src="https://latex.codecogs.com/gif.latex?P(s | O_t )=\text { Probability of a sensor reading value when sleep onset is observed at a time bin } t " />
+## Introduction to Parings
 
-Inline-style: 
-![alt text](https://latex.codecogs.com/gif.latex?y^2%20=%20x^3%20+%20b " abc ")
+An admissible bilinear pairing is a function ![](https://latex.codecogs.com/gif.latex?$e:%20\mathbb{G}_1%20\times%20\mathbb{G}_2%20\rightarrow%20\mathbb{G}_T%20$), 
+where ![][g1] and ![][g2] are cyclic subgroups of elliptic curve groups, ![][gt] is a cyclic subgroup of 
+the multiplicative group of a finite field, ![][g1], ![][g2] and ![][gt] have order r, and the following conditions hold:
 
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+• Bilinearity: for ![](https://latex.codecogs.com/gif.latex?$P,%20Q%20\in%20\mathbb{G}_1$) and ![](https://latex.codecogs.com/gif.latex?$R,%20S%20\in%20\mathbb{G}_2$), 
+![](https://latex.codecogs.com/gif.latex?$e(P%20+%20Q,%20R)%20=%20e(P,%20R).e(Q,%20R)$) and ![](https://latex.codecogs.com/gif.latex?$e(P,R%20+%20S)%20=%20e(P,R).e(P,S)$)
 
-E<sub>u</sub>: y^2 = x^3 + b\]
-\quad The curve order and the characteristic of $\mathbb{F}_p$ are parameterised as:
-\[p(u) = 36u^4 + 36u^3 + 24u^2 + 6u + 1\]
-\[n(u) = 36u^4 + 36u^3 + 18u^2 + 6u + 1\]
-\quad Hence the trace (of Frobenius) of the curve
-\[t(u) = 6u^2 + 1\]
-\quad Finding b is actually very simple: take the smallest $b \neq 0$ such that $b + 1$ is a
-quadratic residue modp and the point $G = (1,\sqrt[2]{b + 1}$ mod $p)$, which is clearly
-on the curve. 
+• Non-degeneracy: $e(P, R) \neq 1$ for some $P \in \mathbb{G}_1$ and $R \in \mathbb{G}_2$. Or, equivalently, $e(P, R) = 1$ for all $R \in \mathbb{G}_2$ if and only if $P = \mathcal{O}$; and $e(P, R) = 1$ for all $P \in \mathbb{G}_1$ if and only if $R = \mathcal{O}$.\\
+
+Also, it immediately follows that $e(aP, bR)=e(P, R)^{ab}=e(bP, aR)$ for any two integers a and b.
+
+## Barreto - Naehrig curves 
+A BN curve is an elliptic curve over a finite prime field ![][Fp], with prime order n and  embedding degree k = 12.
+
+The equation of the curve is 
+
+![](https://latex.codecogs.com/gif.latex?E_{u}:%20y^2%20=%20x^3%20+%20b%20\quad%20with%20\quad%20b%20\neq%200)
+
+The curve order and the characteristic of ![][Fp] are parameterised as: 
+
+![][pu] 
+
+![][nu] 
+
+Hence the trace (of Frobenius) of the curve
+ 
+![][tu]
+
+with ![](https://latex.codecogs.com/gif.latex?$u%20\in%20\mathbb{Z}$)
+
+Finding b is actually very simple: take the smallest b &ne; 0 such that b + 1 is a quadratic residue modp and the point
+ ![](https://latex.codecogs.com/gif.latex?$G%20=%20(1,\sqrt[2]{b%20+%201}$%20\quad%20mod%20\quad%20$p)$), which is clearly on the curve.
+ [3] 
+
+
+[Fp]:https://latex.codecogs.com/gif.latex?\mathbb{F}_p
+[pu]:https://latex.codecogs.com/gif.latex?$p(u)%20=%2036u^4%20+%2036u^3%20+%2024u^2%20+%206u%20+%201$
+[nu]:https://latex.codecogs.com/gif.latex?$n(u)%20=%2036u^4%20+%2036u^3%20+%2018u^2%20+%206u%20+%201$
+[tu]:https://latex.codecogs.com/gif.latex?$t(u)%20=%206u^2%20+%201$
+
+[pairing]:https://latex.codecogs.com/gif.latex?$e:%20\mathbb{G}_1%20\times%20\mathbb{G}_2%20\rightarrow%20\mathbb{G}_T%20$
+[g1]:https://latex.codecogs.com/gif.latex?$\mathbb{G}_1$
+[g2]:https://latex.codecogs.com/gif.latex?$\mathbb{G}_2$
+[gt]:https://latex.codecogs.com/gif.latex?$\mathbb{G}_T$
