@@ -20,13 +20,13 @@ public class PairingsTest {
 
         GT gt_a = Pairings.pair(g1_a, g2_a);
         gt_a.print();
-        assertEquals(gt_a.getgOptimalAte(), GFp12.ONE);
+        assertEquals(gt_a.getOptimalAte(), GFp12.ONE);
 
         G1 g1_b = G1.newG1(CurvePoint.POINT_INFINITY);
         g1_b = g1_b.multiplyScalar(g1_b, b);
         G2 g2_b = G2.multiplyBaseScalar(b);
 
         GT gt_b = Pairings.pair(g1_b, g2_b);
-        assertEquals(gt_b.getgOptimalAte(), GFp12.ONE);
+        assertEquals(gt_b.getOptimalAte(), GFp12.ONE);
     }
 }

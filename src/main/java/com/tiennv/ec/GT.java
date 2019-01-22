@@ -18,10 +18,10 @@ public class GT {
     }
 
     public GT multiplyScalar(BigInteger k) {
-        return new GT(this.getgOptimalAte().exp(k));
+        return new GT(this.getOptimalAte().exp(k));
     }
 
-    public GFp12 getgOptimalAte() {
+    public GFp12 getOptimalAte() {
         return optimalAte;
     }
 
